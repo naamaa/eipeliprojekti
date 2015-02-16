@@ -24,3 +24,12 @@ function PrintAllQuestions(jsonData) {
 		$("#kysymykset").append("<p>" + jsonData[i].Question + "</p>");					
 	}
 }
+
+function Login(){
+	var _username = document.getElementById('username').value;
+	var _password = document.getElementById('password').value;
+	$.post("/login", { username: _username, password: _password }, function(data){
+		alert(data.login);
+	}, "json");
+
+}

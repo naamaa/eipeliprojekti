@@ -22,7 +22,7 @@ db.questions.insert({_id : 16, question : "Tässä kysymyksessä on tarpeettoman pi
 // check inserted data
 db.questions.find()
 // insert userdata to database
-db.users.insert({_id : 1, user : "admin", password : "admin"})
+db.users.insert({_id : 1, user : "admin", password : "cd596fdd75e7a0f5bd64a098379e1fa5ffa56055"})
 db.users.insert({_id : 2, user : "user", password : "user"})
 // check inserted data
 db.users.find()

@@ -22,9 +22,11 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	/* GET /haekysymykset */
 	/* Hakee kysymykset tietokannalta ja lähettää ne clientille? Yes? No? */
 	app.get("/haekysymykset", function(req, res) {
-		  collection.find().toArray(function (err, items) {
-	    		res.send(items);   						
-  			});
+		var questions = db.collection('questions');
+	  	questions.find().toArray(function (err, items) {
+	  		console.log("items length : " + items.length);
+    		res.send(items);   						
+		});
 	});
 
 	/* POST /login */

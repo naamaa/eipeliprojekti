@@ -1,0 +1,11 @@
+.btn-group-vertical
+{
+	/* streches question buttons to parent width */
+	width: 100%;
+}
+
+.btn
+{
+	/* splits text in buttons to multiple lines when text doesnt't fir to one line */
+	white-space: normal;
+}

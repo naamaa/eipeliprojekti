@@ -7,32 +7,39 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
-
-    <title>Signin Template for Bootstrap</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  
+    <!-- Bootstrap & jquery -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!-- Javascript -->
     <script src="js/functions.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+
+    <title>Anniskelupassi</title>
   </head>
 
-  <body>
-  <div id= "login">
-    <p>
-    Username: <input type="text" id="username" length="12">
-    Password <input type="password" id="password" length="12">
-    <input id="loginBtn" type="submit" value ="Login" onclick="Login()">
-    </p>
+  <body onLoad="Init()">
+  <div id="main" class="container">
+    <form class="form-inline">
+      <hr/>
+      <div class="form-group">
+        <label for="text">Käyttäjätunnus:</label>
+        <input class="form-control" type="text" id="username" length="12">
+      </div>
+      <div class="form-group">
+        <label for="password">Salasana:</label>
+        <input class="form-control" type="password" id="password" length="12">
+      </div>
+      <input id="loginBtn" class="btn btn-default" type="submit" value="Login" onclick="Login()">
+    </form>
+    <hr/>
+    <h4><b>Kysymykset</b></h4>
     </div>
-    <div class="container">
-        <h2 class="form-signin-heading">Vuoden kysymykset 2015</h2>
-        <div id="kysymykset">
-      
-        </div>
+    <div id="questions" class="container">
 
-        <button onclick="FetchQuestions()"> Hae kysymykset! </button>
-    </div> <!-- /container -->
-
+    </div> <!-- questions /container -->
+  </div> <!-- main /container -->
   </body>
 </html>

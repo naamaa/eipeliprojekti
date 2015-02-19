@@ -47,11 +47,11 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 			/*check if username matches the password */
 			if(item && item.password == hashpassword){
 				console.log("Password was right!");
-				res.json({login:'success'});
+				res.json({succesful: true});
 			}
 
 			else{
-				res.json({login:'failed'});
+				res.json({succesful: false});
 		}
 		});
 	});

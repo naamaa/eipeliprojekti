@@ -73,6 +73,9 @@ function Login(){
 	var _username = document.getElementById('username').value;
 	var _password = document.getElementById('password').value;
 	$.post("/login", { username: _username, password: _password }, function(data){
-		alert(data.login);
+		alert(data.toString());
+		if(data = true){
+			window.location.replace("/controlpanel.html");
+		}
 	}, "json");
 }

@@ -85,15 +85,11 @@ function Login() {
 // Login function for normal user (via code)
 function LoginUser() {
 	var _loginCode = document.getElementById('loginCode').value;
-	alert(_loginCode);
-	if (_loginCode != null)
-	{
-		$.post("/loginUser", { loginCode: _loginCode }, function(data) {
-			if (data.successful) {
-				window.location.replace("exam.html");
-			} else {
-				alert("Invalid login code.");
-			} 
-		}, "json");
-	}	
+	$.post("/loginUser", { loginCode: _loginCode }, function(data) {
+		if (data.successful) {
+			window.location.replace("exam.html");
+		} else {
+			alert("Invalid login code.");
+		} 
+	}, "json");
 }

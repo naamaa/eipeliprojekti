@@ -69,13 +69,31 @@ function PrintAllQuestions(jsonData) {
 	}
 }
 
-function Login(){
+// Login function for admin user
+function Login() {
 	var _username = document.getElementById('username').value;
 	var _password = document.getElementById('password').value;
-	$.post("/login", { username: _username, password: _password }, function(data){
-		alert(data.toString());
-		if(data = true){
-			window.location.replace("/controlpanel.html");
-		}
+	$.post("/login", { username: _username, password: _password }, function(data) {
+		if (data.successful) {
+				window.location.replace("controlpanel.html");
+			} else {
+				alert("Invalid login data.");
+			} 
 	}, "json");
+}
+
+// Login function for normal user (via code)
+function LoginUser() {
+	var _loginCode = document.getElementById('loginCode').value;
+	alert(_loginCode);
+	if (_loginCode != null)
+	{
+		$.post("/loginUser", { loginCode: _loginCode }, function(data) {
+			if (data.successful) {
+				window.location.replace("exam.html");
+			} else {
+				alert("Invalid login code.");
+			} 
+		}, "json");
+	}	
 }

@@ -40,19 +40,40 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		var users = db.collection('users');
 		console.log(hashpassword);
 		/* check if username matches the database */
-		users.findOne({user: username}, function(err, item){
-			if (err){
+		users.findOne( {user: username}, function(err, item) {
+			if (err) {
 				console.log(err);
+				res.json({successful: false});
 			}
 			/*check if username matches the password */
-			if(item && item.password == hashpassword){
-				console.log("Password was right!");
-				res.json({succesful: true});
+			else if (item && item.password == hashpassword) {
+				console.log("Correct password, sending successful : true...")
+				res.json({successful: true});
+			} else {
+				res.json({successful: false});
 			}
 
-			else{
-				res.json({succesful: false});
-		}
+		});
+	});
+
+	/* POST /loginUser */
+	app.post('/loginUser', function(req, res) {
+		console.log("user login code: ", req.body);
+		/* do stuff for password */
+		var userlogincode = req.body.loginCode;
+		var users = db.collection('logincodes');
+		/* check if username matches the database */
+		users.findOne( {logincode: userlogincode}, function(err, item) {
+			if (err) {
+				console.log(err);
+				res.json({successful: false});
+			} else if (item && item.logincode == userlogincode) {
+				console.log("Correct login code, sending successful : true...")
+				res.json({successful: true});
+			} else {
+				res.json({successful: false});
+			}
+			
 		});
 	});
 

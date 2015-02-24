@@ -1,22 +1,9 @@
-.btn-group-vertical
+.center-x
 {
-	/* streches question buttons to parent width */
-	width: 100%;
+	text-align:center;
 }
 
-.btn
+.center-y
 {
-	/* splits text in buttons to multiple lines when text doesnt't fit to one line */
-	white-space: normal;
-}
-
-#main-container
-{
-	margin-top: 15px;
-	max-width: 850px;
-}
-
-#questions-container
-{
-	max-width: 100%;
+	vertical-align:middle;
 }

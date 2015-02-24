@@ -15,31 +15,34 @@
     <!-- Javascript -->
     <script src="js/functions.js"></script>
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" tpye="text/css" href="css/styles.css" >
+    <link rel="stylesheet" tpye="text/css" href="css/login.css" >
 
-    <title>Anniskelupassi</title>
+    <title>Anniskelupassi - tunnistautuminen</title>
   </head>
 
-  <body onLoad="Init()">
-  <div id="main-container" class="container">
-    <!--
-    <form class="form-inline">
-      <hr/>
-      <div class="form-group">
-        <label for="text">Käyttäjätunnus:</label>
-        <input class="form-control" type="text" id="username" length="12">
-      </div>
-      <div class="form-group">
-        <label for="password">Salasana:</label>
-        <input class="form-control" type="password" id="password" length="12">
-      </div>
-      <input id="loginBtn" class="btn btn-default" type="submit" value="Login" onclick="Login()">
+  <body>
+  <!-- user -->
+  <div class="container login-container">
+    <form class="form-signin">
+      <h2 class="form-signin-heading center-x">Kokeen tekijä</h2>
+      <label for="login-code" class="sr-only">Koodi</label>
+      <input type="text" id="loginCode" class="form-control" placeholder="Koodi" maxlength="4" required autofocus>
+      <!--<button class="btn btn-lg btn-primary btn-block" type="submit">Tunnistaudu</button>-->
+      <input id="loginBtn" class="btn btn-lg btn-primary btn-block" type="submit" value="Kirjaudu" onclick="LoginUser()">
     </form>
-    <hr/>
-    <h4><b>Kysymykset</b></h4>
-    -->
-    <div id="questions-container" class="container">
-    </div> <!-- questions /container -->
-  </div> <!-- main /container -->
+  </div> <!-- login-container /container -->
+  <hr/>
+  <!-- admin -->
+  <div class="container login-container">
+    <form class="form-signin">
+      <h2 class="form-signin-heading center-x">Ylläpitäjä</h2>
+      <label for="username" class="sr-only">Tunnus</label>
+      <input class="form-control" type="text" id="username" length="12" placeholder="Tunnus">
+      <label for="password" class="sr-only">Salasana</label>
+      <input class="form-control" type="password" id="password" length="12" placeholder="Salasana">
+      <input id="loginBtn" class="btn btn-lg btn-primary btn-block" type="submit" value="Kirjaudu" onclick="Login()">
+    </form>
+  </div> <!-- login-container /container -->
   </body>
 </html>

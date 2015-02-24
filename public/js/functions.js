@@ -32,14 +32,14 @@ function PrintAllQuestions(jsonData) {
 		var answerCounter = 0;
 		console.log('Adding question : ' + jsonData[i].question);
 
-		$('#questions').append(
+		$('#questions-container').append(
 			'<label for="question' 
 			+ questionCounter 
 			+ '" class="control-label input-group">' 
 			+ questionCounter + '. ' 
 			+ jsonData[i].question + '</label>');
 
-		$("#questions").append(
+		$("#questions-container").append(
 			'<div id="question' 
 			+ jsonData[i]._id 
 			+ '" class="btn-group-vertical" data-toggle="buttons"></div><hr/>');

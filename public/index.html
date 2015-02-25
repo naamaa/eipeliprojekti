@@ -26,6 +26,7 @@
   <div class="container login-container">
     <form class="form-signin">
       <h2 class="form-signin-heading center-x">Kokeen tekijä</h2>
+      <div id="retry"></div>
       <label for="login-code" class="sr-only">Koodi</label>
       <input type="text" id="loginCode" class="form-control" placeholder="Koodi" maxlength="4" required autofocus>
       <!--<button class="btn btn-lg btn-primary btn-block" type="submit">Tunnistaudu</button>-->
@@ -37,12 +38,22 @@
   <div class="container login-container">
     <form class="form-signin">
       <h2 class="form-signin-heading center-x">Ylläpitäjä</h2>
+      <div id="retryadmin"></div>
       <label for="username" class="sr-only">Tunnus</label>
       <input class="form-control" type="text" id="username" length="12" placeholder="Tunnus">
       <label for="password" class="sr-only">Salasana</label>
       <input class="form-control" type="password" id="password" length="12" placeholder="Salasana">
-      <input id="loginBtn" class="btn btn-lg btn-primary btn-block" type="submit" value="Kirjaudu" onclick="Login()">
+      <input id="AdminloginBtn" class="btn btn-lg btn-primary btn-block" type="submit" value="Kirjaudu" onclick="Login()">
     </form>
   </div> <!-- login-container /container -->
+
+  <script>
+    var retry = getUrlParameter('retry');
+    var retryadmin = getUrlParameter('retryadmin');
+    if (retry == "true")
+      $("#retry").append('<font color="red">Virheellinen koodi</font>');
+    if (retryadmin == "true")
+      $("#retryadmin").append('<font color="red">Virheellinen käyttäjätunnus tai salasana</font>');
+  </script>
   </body>
 </html>

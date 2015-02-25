@@ -19,8 +19,8 @@ db.questions.insert({_id : 13, question : "This is example11?", rightAnswer : "T
 db.questions.insert({_id : 14, question : "T‰ss‰ kysymyksess‰ on tarpeettoman pitk‰ kysymyksenasettelu testaamista varten. T‰m‰ kysymys sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", rightAnswer : "Oikea vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer1 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer2 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰."})
 db.questions.insert({_id : 15, question : "T‰ss‰ kysymyksess‰ on tarpeettoman pitk‰ kysymyksenasettelu testaamista varten. T‰m‰ kysymys sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", rightAnswer : "Oikea vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer1 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer2 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰."})
 db.questions.insert({_id : 16, question : "T‰ss‰ kysymyksess‰ on tarpeettoman pitk‰ kysymyksenasettelu testaamista varten. T‰m‰ kysymys sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", rightAnswer : "Oikea vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer1 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer2 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰."})
-db.logincodes.insert({_id : 1, logincode : 1234})
-db.logincodes.insert({_id : 1, logincode : 0000})
+db.logincodes.insert({_id : 1, logincode : "1234"})
+db.logincodes.insert({_id : 2, logincode : "0000"})
 // check inserted data
 db.questions.find()
 // insert userdata to database

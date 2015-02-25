@@ -24,14 +24,14 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	app.get("/haekysymykset", function(req, res) {
 		var questions = db.collection('questions');
 	  	questions.find().toArray(function (err, items) {
-	  		console.log("items length : " + items.length);
+	  		//console.log("items length : " + items.length);
     		res.send(items);   						
 		});
 	});
 
 	/* POST /login */
 	app.post('/login', function(req, res){
-		console.log("login data:", req.body);
+		console.log("admin login data:", req.body);
 		/* do stuff for password */
 		var salt = "0serj9fuhaa09suejdrawserf90hnj23490";
 		var username = req.body.username;
@@ -50,6 +50,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 				console.log("Correct password, sending successful : true...")
 				res.json({successful: true});
 			} else {
+				console.log("Wrong password, sending successful : false...")
 				res.json({successful: false});
 			}
 
@@ -71,6 +72,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 				console.log("Correct login code, sending successful : true...")
 				res.json({successful: true});
 			} else {
+				console.log("Wrong login code, sending successful : false...")
 				res.json({successful: false});
 			}
 			
@@ -80,6 +82,6 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	var server = app.listen(3000, function () {
 		var host = server.address().address
 		var port = server.address().port
-		console.log('Example app listening at http://%s:%s', host, port)
+		console.log('Anniskelupassi: app listening at http://%s:%s', host, port)
 	}) 
 });

@@ -23,6 +23,27 @@ function FetchQuestions() {
 	});
 }
 
+/* Shuffles the keys that are used for calling the correct answers. */
+/* Used in PrintAllQuestions(jsonData) */
+/* knuth-shuffle https://github.com/coolaj86/knuth-shuffle */
+function shuffle() {
+	var array = ['option1', 'option2', 'option3'];
+
+	var currentIndex = array.length;
+	var tempValue;
+	var randomIndex;
+
+	while (0 !== currentIndex) {
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		tempValue = array[currentIndex];
+    	array[currentIndex] = array[randomIndex];
+    	array[randomIndex] = tempValue;
+	}
+	return array;
+}
+
 /* Tulostetaan HTML dokumenttiin FetchQuestions() funktion löytämät rivit */
 /* Placeholder, saa muuttaa ja tulee muuttumaan. */
 function PrintAllQuestions(jsonData) {
@@ -32,6 +53,12 @@ function PrintAllQuestions(jsonData) {
 		var answerCounter = 0;
 		//console.log('Adding question : ' + jsonData[i].question);
 
+		// shuffledKeys contains randomized array of keys
+		// option1, option2, option3
+		var shuffledKeys = shuffle();
+		var keyCounter = 0;
+		
+		
 		$('#questions-container').append(
 			'<label for="question' 
 			+ questionCounter 
@@ -48,21 +75,21 @@ function PrintAllQuestions(jsonData) {
 			'<label class="btn btn-default"><input name="' 
 			+ jsonData[i]._id 
 			+ '" value="2" type="radio">' 
-			+ jsonData[i].rightAnswer 
+			+ jsonData[i][shuffledKeys[keyCounter]]
 			+ '</input></label>');
-
+		keyCounter++;
 		$("#question" + jsonData[i]._id).append(
 			'<label class="btn btn-default"><input name="' 
 			+ jsonData[i]._id 
 			+ '" value="2" type="radio">' 
-			+ jsonData[i].wrongAnswer1 
+			+ jsonData[i][shuffledKeys[keyCounter]]
 			+ '</input></label>');
-
+		keyCounter++;
 		$("#question" + jsonData[i]._id).append(
 			'<label class="btn btn-default"><input name="' 
 			+ jsonData[i]._id 
 			+ '" value="3" type="radio">' 
-			+ jsonData[i].wrongAnswer2 
+			+ jsonData[i][shuffledKeys[keyCounter]]
 			+ '</input></label>');
 
 		questionCounter++;				

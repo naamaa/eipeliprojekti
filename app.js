@@ -23,11 +23,15 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	/* Hakee kysymykset tietokannalta ja lähettää ne clientille? Yes? No? */
 	app.get("/haekysymykset", function(req, res) {
 		var questions = db.collection('questions');
+
 	  	questions.find().toArray(function (err, items) {
-	  		//console.log("items length : " + items.length);
+	  		console.log("Sending items to client, I'll let you know if something goes wrong.");
+	  		
     		res.send(items);   						
 		});
 	});
+
+
 
 	/* POST /login */
 	app.post('/login', function(req, res){
@@ -63,6 +67,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		/* do stuff for password */
 		var userlogincode = req.body.loginCode;
 		var users = db.collection('logincodes');
+
 		/* check if username matches the database */
 		users.findOne( {logincode: userlogincode}, function(err, item) {
 			if (err) {
@@ -79,7 +84,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
-	var server = app.listen(3000, function () {
+		var server = app.listen(3000, function () {
 		var host = server.address().address
 		var port = server.address().port
 		console.log('Anniskelupassi: app listening at http://%s:%s', host, port)

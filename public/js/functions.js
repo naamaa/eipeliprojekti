@@ -44,6 +44,7 @@ function shuffle() {
 	return array;
 }
 
+
 /* Tulostetaan HTML dokumenttiin FetchQuestions() funktion löytämät rivit */
 /* Placeholder, saa muuttaa ja tulee muuttumaan. */
 function PrintAllQuestions(jsonData) {
@@ -57,38 +58,39 @@ function PrintAllQuestions(jsonData) {
 		// option1, option2, option3
 		var shuffledKeys = shuffle();
 		var keyCounter = 0;
+		var depr = "perkele";
 		
 		
-		$('#questions-container').append(
+		$('#answers-form').append(
 			'<label for="question' 
 			+ questionCounter 
 			+ '" class="control-label input-group">' 
 			+ questionCounter + '. ' 
 			+ jsonData[i].question + '</label>');
 
-		$("#questions-container").append(
+		$("#answers-form").append(
 			'<div id="question' 
 			+ jsonData[i]._id 
 			+ '" class="btn-group-vertical" data-toggle="buttons"></div><hr/>');
 
 		$("#question" + jsonData[i]._id).append(
 			'<label class="btn btn-default"><input name="' 
-			+ jsonData[i]._id 
-			+ '" value="2" type="radio">' 
+			+ "question"+jsonData[i]._id  
+			+ '" value=' + shuffledKeys[keyCounter] + ' type="radio">'  
 			+ jsonData[i][shuffledKeys[keyCounter]]
 			+ '</input></label>');
 		keyCounter++;
 		$("#question" + jsonData[i]._id).append(
 			'<label class="btn btn-default"><input name="' 
 			+ jsonData[i]._id 
-			+ '" value="2" type="radio">' 
+			+ '" value=' + shuffledKeys[keyCounter] + ' type="radio">'    
 			+ jsonData[i][shuffledKeys[keyCounter]]
 			+ '</input></label>');
 		keyCounter++;
 		$("#question" + jsonData[i]._id).append(
 			'<label class="btn btn-default"><input name="' 
 			+ jsonData[i]._id 
-			+ '" value="3" type="radio">' 
+			+ '" value=' + shuffledKeys[keyCounter] + ' type="radio">'  
 			+ jsonData[i][shuffledKeys[keyCounter]]
 			+ '</input></label>');
 

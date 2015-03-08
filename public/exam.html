@@ -9,8 +9,8 @@
     <link rel="icon" href="../../favicon.ico">
   
     <!-- Bootstrap & jquery -->
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <!-- Javascript -->
     <script src="js/functions.js"></script>
@@ -21,8 +21,14 @@
     <title>Anniskelupassi</title>
   </head>
   <body onLoad="Init()">
+
     <div id="main-container" class="container">
       <div id="questions-container" class="container">
+
+        <form action="/check_answers" method="post" id="answers-form">
+          <input name="button" id="submit-btn" value="SUBMIT SON!" type="submit" />
+        </form>
+
       </div> <!-- questions-container /container -->
     </div> <!-- main-container /container -->
   </body>

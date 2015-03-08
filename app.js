@@ -84,6 +84,20 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
+	/* POST /check_answers */
+	/* Iterates through body values. IF the value is 'option1', add 1 point to total scores. */
+	app.post('/check_answers', function(req, res) {
+		var scores = 0;
+		for (var key in req.body) {
+			console.log("Key " + key + " opens: " + req.body[key]);
+			var value = req.body[key];
+			if (value === "option1") {
+				scores++;
+			}
+		}
+		console.log("HOORAY, total points: " + scores);
+	});
+
 		var server = app.listen(3000, function () {
 		var host = server.address().address
 		var port = server.address().port

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+  
+    <!-- Bootstrap & jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!-- Javascript -->
+    <script src="js/cpfunctions.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="css/exam.css">
+    <link rel="stylesheet" tpye="text/css" href="css/styles.css">
+
+    <title>Anniskelupassi</title>
+  </head>
+  <body onLoad="FetchQuestions()">
+    <div id="main-container" class="container">
+      <div id="questions-container" class="container">
+
+      	<!-- Add questions button -->
+      	<input id="add_question" type="submit" value="Lisää kysymyksiä" onclick="RevealAdd()">
+      	<!-- Text boxes for adding questions -->
+      	<div id="add_question_inputs" style="display:none">
+      	<input id="question_id" type="text" value="ID(int)">
+      	<input id="question" type="text" value="Kysymys">
+      	<input id="rightAnswer" type="text" value="Oikea vastaus">
+      	<input id="wrongAnswer1" type="text" value="Väärä vastaus">
+      	<input id="wrongAnswer2" type="text" value="Väärä vastaus">
+      	<input id="add_question" type="Submit" value="Lisää kysymys" onclick="AddQuestion()">
+      	</div>
+
+        <form action="/check_answers" method="post" id="answers-form">
+        </form>
+
+      </div> <!-- questions-container /container -->
+    </div> <!-- main-container /container -->
+  </body>
+</html>

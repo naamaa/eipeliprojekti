@@ -5,7 +5,6 @@ var MongoClient = require('mongodb').MongoClient
 var bodyParser = require('body-parser');
 var sha1 = require('sha1');
 
-
 MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, db) {
 	if (err) {
 	    throw err;
@@ -96,6 +95,90 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 			}
 		}
 		console.log("HOORAY, total points: " + scores);
+	});
+
+	/* POST /delete_question */
+	app.post('/delete_question', function(req,res){
+		var id = parseInt(req.body._id);
+		var questions = db.collection('questions');
+		questions.remove({_id: id}, function(err, result){
+			if(err){
+				console.log(err);
+				res.json({succesful: false});
+			}
+			else if(result){
+				console.log("Deleted the question!");
+				res.json({succesful: true});
+			}
+			else if(!result){
+				console.log("Couldn't find requested question.")
+				res.json({succesful: false});
+			}
+		});
+		console.log("Got this id:" + id);
+	});
+
+	/* POST /edit_question */
+	app.post('/edit_question', function(req,res){
+		var id= parseInt(req.body._id);
+		var _question = String(req.body.question);
+		var _rightAnswer = String(req.body.rightAnswer);
+		var _wrongAnswer1 = String(req.body.wrongAnswer1);
+		var _wrongAnswer2 = String(req.body.wrongAnswer2);
+
+		var questions = db.collection('questions');
+		questions.update({_id: id},
+		{
+			question: _question,
+			rightAnswer: _rightAnswer,
+			wrongAnswer1: _wrongAnswer1,
+			wrongAnswer2: _wrongAnswer2
+		},function(err, result){
+			if(err){
+				console.log(err);
+				res.json({succesful: false});
+			}
+			else if(result){
+				console.log("Updated the question!");
+				res.json({succesful: true});
+			}
+			else if(!result){
+				console.log("Couldn't find a question with that id.")
+				res.json({succesful: false});
+			}
+		});
+	});
+
+	/*POST /add_question */
+	app.post('/add_question', function(req,res){
+		var id= parseInt(req.body._id);
+		var _question = String(req.body.question);
+		var _rightAnswer = String(req.body.rightAnswer);
+		var _wrongAnswer1 = String(req.body.wrongAnswer1);
+		var _wrongAnswer2 = String(req.body.wrongAnswer2);
+
+		var questions = db.collection('questions');
+		questions.insert(
+		{
+			_id: id,
+			question: _question,
+			rightAnswer: _rightAnswer,
+			wrongAnswer1: _wrongAnswer1,
+			wrongAnswer2: _wrongAnswer2
+		},function(err, result){
+			if(err){
+				console.log(err);
+				res.json({succesful: false});
+			}
+			else if(result){
+				console.log("Added!");
+				res.json({succesful: true});
+			}
+			else if(!result){
+				console.log("Couldn't add question.")
+				res.json({succesful: false});
+			}
+		});
 	});
 
 		var server = app.listen(3000, function () {

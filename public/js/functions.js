@@ -1,5 +1,6 @@
 function Init() {
 	FetchQuestions();
+	timerBar();
 }
 
 
@@ -149,4 +150,19 @@ function getUrlParameter(sParam)
             return sParameterName[1];
         }
     }
-}  
+}
+// countdown bar to exam page
+function timerBar(callback) {
+    var bar = document.getElementById('progress'),
+    // 60s timer
+    time = 0, max = 60,
+    int = setInterval(function() {
+        bar.style.width = Math.floor(100 * time++ / max) + '%';
+        if (time - 1 == max) {
+            clearInterval(int);
+            // 100ms delay between new draw
+            callback && setTimeout(callback, 100);
+        }
+    }, 1000);
+}
+

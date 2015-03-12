@@ -99,47 +99,10 @@ function PrintAllQuestions(jsonData) {
 	}
 }
 
-// Login function for admin user
-function Login() {
-	console.log("Logging in (admin)");
-	var _username = document.getElementById('username').value;
-	var _password = document.getElementById('password').value;
-	var url = "http://localhost:3000/index.html?retryadmin=true";
-
-	$.post("/login", { username: _username, password: _password }, function(data) {
-		if (data.successful == true) {
-			url = "http://localhost:3000/controlpanel.html";
-			console.log("successful admin login, redirecting...");
-		} else {
-			console.log("Invalid login data.");
-		}
-		window.location.href = url;
-	}, "json");	
-}
-
-// Login function for normal user (via code)
-function LoginUser() {
-	console.log("Logging in (user)");
-	var _loginCode = document.getElementById('loginCode').value;
-	var url = "http://localhost:3000/index.html?retry=true";
-
-	$.post("/loginUser", { loginCode: _loginCode }, function(data) {
-		if (data.successful == true) {
-			url = "http://localhost:3000/exam.html";
-			console.log("successful user login, redirecting...");
-		} else {
-			console.log("Invalid login code.");
-		}
-		window.location.href = url;
-	}, "json");
-}
-
-/* Function that gets GET-parameters by name (from URL)
+/* 	Function that gets GET-parameters by name (from URL)
 	URL .../index.html?retry=true
-	getUrlParameter('retry') => 'true'
-*/
-function getUrlParameter(sParam)
-{
+	getUrlParameter('retry') => 'true'		*/
+function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
     for (var i = 0; i < sURLVariables.length; i++) 
@@ -151,6 +114,7 @@ function getUrlParameter(sParam)
         }
     }
 }
+
 // countdown bar to exam page
 function timerBar(callback) {
     var bar = document.getElementById('progress'),

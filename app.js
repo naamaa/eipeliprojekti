@@ -30,11 +30,9 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
-
-
 	/* POST /login */
 	app.post('/login', function(req, res){
-		console.log("admin login data:", req.body);
+		console.log("/login REQUEST : admin login data:", req.body.username, req.body.password);
 		/* do stuff for password */
 		var salt = "0serj9fuhaa09suejdrawserf90hnj23490";
 		var username = req.body.username;
@@ -46,15 +44,15 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		users.findOne( {user: username}, function(err, item) {
 			if (err) {
 				console.log(err);
-				res.json({successful: false});
+				res.redirect("/index.html?retryadmin=true")
 			}
 			/*check if username matches the password */
 			else if (item && item.password == hashpassword) {
-				console.log("Correct password, sending successful : true...")
-				res.json({successful: true});
+				console.log("Correct login info, redirecting to controlpanel.html")
+				res.redirect("/controlpanel.html");
 			} else {
-				console.log("Wrong password, sending successful : false...")
-				res.json({successful: false});
+				console.log("Wrong password, redirecting to index.html")
+				res.redirect("/index.html?retryadmin=true")
 			}
 
 		});
@@ -62,22 +60,20 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 	/* POST /loginUser */
 	app.post('/loginUser', function(req, res) {
-		console.log("user login code: ", req.body);
+		console.log("/loginUser REQUEST : user login code: " + req.body.loginCode);
 		/* do stuff for password */
 		var userlogincode = req.body.loginCode;
 		var users = db.collection('logincodes');
-
 		/* check if username matches the database */
 		users.findOne( {logincode: userlogincode}, function(err, item) {
 			if (err) {
 				console.log(err);
-				res.json({successful: false});
 			} else if (item && item.logincode == userlogincode) {
-				console.log("Correct login code, sending successful : true...")
-				res.json({successful: true});
+				console.log("Correct login code, redirecting to exam.html");
+				res.redirect("/exam.html");
 			} else {
-				console.log("Wrong login code, sending successful : false...")
-				res.json({successful: false});
+				console.log("Wrong login code, redirecting to index.html");
+				res.redirect("/index.html?retry=true");
 			}
 			
 		});

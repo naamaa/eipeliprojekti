@@ -24,33 +24,33 @@
   <body>
   <!-- user -->
   <div class="container login-container">
-    <form class="form-signin">
+    <form class="form-signin" action="/loginUser" method="post">
       <h2 class="form-signin-heading center-x">Kokeen tekijä</h2>
       <div id="retry"></div>
       <label for="login-code" class="sr-only">Koodi</label>
-      <input type="text" id="loginCode" class="form-control" placeholder="Koodi" maxlength="4" required autofocus>
+      <input type="text" id="loginCode" name="loginCode" class="form-control" placeholder="Koodi" maxlength="4" required autofocus />
       <!--<button class="btn btn-lg btn-primary btn-block" type="submit">Tunnistaudu</button>-->
-      <input id="loginBtn" class="btn btn-lg btn-primary btn-block" type="submit" value="Kirjaudu" onclick="LoginUser()">
+      <input id="loginBtn" class="btn btn-lg btn-primary btn-block" type="submit" value="Kirjaudu" />
     </form>
   </div> <!-- login-container /container -->
   <hr/>
   <!-- admin -->
   <div class="container login-container">
-    <form class="form-signin">
+    <form class="form-signin" action="/login" method="post">
       <h2 class="form-signin-heading center-x">Ylläpitäjä</h2>
       <div id="retryadmin"></div>
       <label for="username" class="sr-only">Tunnus</label>
-      <input class="form-control" type="text" id="username" length="12" placeholder="Tunnus">
+      <input class="form-control" type="text" id="username" name="username" length="12" placeholder="Tunnus"required />
       <label for="password" class="sr-only">Salasana</label>
-      <input class="form-control" type="password" id="password" length="12" placeholder="Salasana">
-      <input id="AdminloginBtn" class="btn btn-lg btn-primary btn-block" type="submit" value="Kirjaudu" onclick="Login()">
+      <input class="form-control" type="password" id="password" name="password" length="12" placeholder="Salasana" required>
+      <input id="AdminloginBtn" class="btn btn-lg btn-primary btn-block" type="submit" value="Kirjaudu" />
     </form>
   </div> <!-- login-container /container -->
 
   <script>
     var retry = getUrlParameter('retry');
     var retryadmin = getUrlParameter('retryadmin');
-    if (retry == "true")
+    if (retry == "true") 
       $("#retry").append('<font color="red">Virheellinen koodi</font>');
     if (retryadmin == "true")
       $("#retryadmin").append('<font color="red">Virheellinen käyttäjätunnus tai salasana</font>');

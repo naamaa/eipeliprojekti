@@ -20,7 +20,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 	/* GET /haekysymykset */
 	/* Hakee kysymykset tietokannalta ja lähettää ne clientille? Yes? No? */
-	app.get("/haekysymykset", function(req, res) {
+	app.get("/get_questions", function(req, res) {
 		var questions = db.collection('questions');
 
 	  	questions.find().toArray(function (err, items) {
@@ -59,7 +59,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	/* POST /loginUser */
-	app.post('/loginUser', function(req, res) {
+	app.post('/login_user', function(req, res) {
 		console.log("/loginUser REQUEST : user login code: " + req.body.loginCode);
 		/* do stuff for password */
 		var userlogincode = req.body.loginCode;
@@ -118,17 +118,17 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	app.post('/edit_question', function(req,res){
 		var id= parseInt(req.body._id);
 		var _question = String(req.body.question);
-		var _rightAnswer = String(req.body.rightAnswer);
-		var _wrongAnswer1 = String(req.body.wrongAnswer1);
-		var _wrongAnswer2 = String(req.body.wrongAnswer2);
+		var _option1 = String(req.body.option1);
+		var _option2 = String(req.body.option2);
+		var _option3 = String(req.body.option3);
 
 		var questions = db.collection('questions');
 		questions.update({_id: id},
 		{
 			question: _question,
-			rightAnswer: _rightAnswer,
-			wrongAnswer1: _wrongAnswer1,
-			wrongAnswer2: _wrongAnswer2
+			option1: _option1,
+			option2: _option2,
+			option3: _option3
 		},function(err, result){
 			if(err){
 				console.log(err);
@@ -149,18 +149,18 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	app.post('/add_question', function(req,res){
 		var id= parseInt(req.body._id);
 		var _question = String(req.body.question);
-		var _rightAnswer = String(req.body.rightAnswer);
-		var _wrongAnswer1 = String(req.body.wrongAnswer1);
-		var _wrongAnswer2 = String(req.body.wrongAnswer2);
+		var _option1 = String(req.body.option1);
+		var _option2 = String(req.body.option2);
+		var _option3 = String(req.body.option3);
 
 		var questions = db.collection('questions');
 		questions.insert(
 		{
 			_id: id,
 			question: _question,
-			rightAnswer: _rightAnswer,
-			wrongAnswer1: _wrongAnswer1,
-			wrongAnswer2: _wrongAnswer2
+			option1: _option1,
+			option2: _option2,
+			option3: _option3
 		},function(err, result){
 			if(err){
 				console.log(err);

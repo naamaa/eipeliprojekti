@@ -14,12 +14,20 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <!-- Javascript -->
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="css/exam.css">
+    <link rel="stylesheet" type="text/css" href="css/controlpanel.css">
     <link rel="stylesheet" tpye="text/css" href="css/styles.css">
 
-    <title>Anniskelupassi</title>
+    <title>Hallintapaneeli</title>
   </head>
   <body>
-  <a href="/editquestions.html"> Muokkaa kysymyksiä </a>
+    <div id="main-container" class="container">
+      <h3 class="center-x center-y">Hallintapaneeli</h3>
+    <ul class="list-group">
+        <a class="center-x center-y list-group-item" href="/editquestions.html"> Kysymysten hallinta</a>
+        <a class="center-x center-y list-group-item disabled" href="#"> Käyttäjähallinta</a>
+        <a class="center-x center-y list-group-item" href="/index.html">Kirjaudu ulos</a>
+    </ul>
+  </div>
+
   </body>
 </html>

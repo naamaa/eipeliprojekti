@@ -1,24 +1,26 @@
+// updated 13.3. with the proper options for questions
+
 // create anniskelupassi database
 use anniskelupassi
 // check that right database is used
 db
 // insert questions to database
-db.questions.insert({_id : 1, question : "This is example1?", rightAnswer : "yes", wrongAnswer1 : "no1", wrongAnswer2 : "no2"})
-db.questions.insert({_id : 2, question : "This is example2?", rightAnswer : "yes", wrongAnswer1 : "no1", wrongAnswer2 : "no2"})
-db.questions.insert({_id : 3, question : "This is example3?", rightAnswer : "yes", wrongAnswer1 : "no1", wrongAnswer2 : "no2"})
-db.questions.insert({_id : 4, question : "This is example4?", rightAnswer : "yes", wrongAnswer1 : "no1", wrongAnswer2 : "no2"})
-db.questions.insert({_id : 5, question : "This is example5?", rightAnswer : "yes", wrongAnswer1 : "no1", wrongAnswer2 : "no2"})
-db.questions.insert({_id : 6, question : "This is example6?", rightAnswer : "yes", wrongAnswer1 : "no1", wrongAnswer2 : "no2"})
-db.questions.insert({_id : 7, question : "This is example7?", rightAnswer : "yes", wrongAnswer1 : "no1", wrongAnswer2 : "no2"})
-db.questions.insert({_id : 8, question : "This is example8?", rightAnswer : "yes", wrongAnswer1 : "no1", wrongAnswer2 : "no2"})
-db.questions.insert({_id : 9, question : "This is example9?", rightAnswer : "yes", wrongAnswer1 : "no1", wrongAnswer2 : "no2"})
-db.questions.insert({_id : 10, question : "This is example10?", rightAnswer : "yes", wrongAnswer1 : "no1", wrongAnswer2 : "no2"})
-db.questions.insert({_id : 11, question : "This is example11?", rightAnswer : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", wrongAnswer1 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", wrongAnswer2 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰."})
-db.questions.insert({_id : 12, question : "This is example11?", rightAnswer : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", wrongAnswer1 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", wrongAnswer2 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰."})
-db.questions.insert({_id : 13, question : "This is example11?", rightAnswer : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", wrongAnswer1 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", wrongAnswer2 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰."})
-db.questions.insert({_id : 14, question : "T‰ss‰ kysymyksess‰ on tarpeettoman pitk‰ kysymyksenasettelu testaamista varten. T‰m‰ kysymys sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", rightAnswer : "Oikea vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer1 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer2 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰."})
-db.questions.insert({_id : 15, question : "T‰ss‰ kysymyksess‰ on tarpeettoman pitk‰ kysymyksenasettelu testaamista varten. T‰m‰ kysymys sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", rightAnswer : "Oikea vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer1 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer2 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰."})
-db.questions.insert({_id : 16, question : "T‰ss‰ kysymyksess‰ on tarpeettoman pitk‰ kysymyksenasettelu testaamista varten. T‰m‰ kysymys sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", rightAnswer : "Oikea vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer1 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", wrongAnswer2 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰."})
+db.questions.insert({_id : 1, question : "This is example1?", option1 : "yes", option2 : "no1", option3 : "no2"})
+db.questions.insert({_id : 2, question : "This is example2?", option1 : "yes", option2 : "no1", option3 : "no2"})
+db.questions.insert({_id : 3, question : "This is example3?", option1 : "yes", option2 : "no1", option3 : "no2"})
+db.questions.insert({_id : 4, question : "This is example4?", option1 : "yes", option2 : "no1", option3 : "no2"})
+db.questions.insert({_id : 5, question : "This is example5?", option1 : "yes", option2 : "no1", option3 : "no2"})
+db.questions.insert({_id : 6, question : "This is example6?", option1 : "yes", option2 : "no1", option3 : "no2"})
+db.questions.insert({_id : 7, question : "This is example7?", option1 : "yes", option2 : "no1", option3 : "no2"})
+db.questions.insert({_id : 8, question : "This is example8?", option1 : "yes", option2 : "no1", option3 : "no2"})
+db.questions.insert({_id : 9, question : "This is example9?", option1 : "yes", option2 : "no1", option3 : "no2"})
+db.questions.insert({_id : 10, question : "This is example10?", option1 : "yes", option2 : "no1", option3 : "no2"})
+db.questions.insert({_id : 11, question : "This is example11?", option1 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", option2 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", option3 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰."})
+db.questions.insert({_id : 12, question : "This is example11?", option1 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", option2 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", option3 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰."})
+db.questions.insert({_id : 13, question : "This is example11?", option1 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", option2 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰.", option3 : "T‰m‰ on huomattavan pitk‰ vastaus miss‰ on tarpeettoman paljon t‰yteteksti‰ ilman sis‰ltˆ‰."})
+db.questions.insert({_id : 14, question : "T‰ss‰ kysymyksess‰ on tarpeettoman pitk‰ kysymyksenasettelu testaamista varten. T‰m‰ kysymys sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", option1 : "Oikea vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", option2 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", option3 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰."})
+db.questions.insert({_id : 15, question : "T‰ss‰ kysymyksess‰ on tarpeettoman pitk‰ kysymyksenasettelu testaamista varten. T‰m‰ kysymys sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", option1 : "Oikea vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", option2 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", option3 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰."})
+db.questions.insert({_id : 16, question : "T‰ss‰ kysymyksess‰ on tarpeettoman pitk‰ kysymyksenasettelu testaamista varten. T‰m‰ kysymys sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", option1 : "Oikea vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", option2 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰.", option3 : "V‰‰r‰ vastaus on liian pitk‰ ja sis‰lt‰‰ tarpeetonta t‰yteteksti‰."})
 db.logincodes.insert({_id : 1, logincode : "1234"})
 db.logincodes.insert({_id : 2, logincode : "0000"})
 // check inserted data

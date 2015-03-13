@@ -1,0 +1,22 @@
+#main-container
+{
+	margin-top: 15px;
+	max-width: 850px;
+}
+
+#questions-container
+{
+	max-width: 100%;
+}
+
+#add_question
+{
+	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.text-edit
+{
+	margin-bottom: 3px;
+}

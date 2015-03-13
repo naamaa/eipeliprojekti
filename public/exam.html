@@ -21,15 +21,13 @@
 
     <title>Anniskelupassi</title>
   </head>
-  <body onLoad="Init()">
+  <body onLoad="initExam()">
 
     <div id="main-container" class="container">
       <div id="questions-container" class="container">
-
         <form action="/check_answers" method="post" id="answers-form">
-          <input name="button" id="submit-btn" value="SUBMIT SON!" type="submit" />
+          <input name="button" id="submit-btn" class="btn btn-primary btn-block" value="Lähetä vastaukset" type="submit" />
         </form>
-
       </div> <!-- questions-container /container -->
     </div> <!-- main-container /container -->
     <!-- footer  -->

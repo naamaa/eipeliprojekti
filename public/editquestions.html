@@ -13,31 +13,37 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <!-- Javascript -->
-    <script src="js/cpfunctions.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/controlpanelfunctions.js"></script>
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="css/exam.css">
     <link rel="stylesheet" tpye="text/css" href="css/styles.css">
+    <link rel="stylesheet" tpye="text/css" href="css/editquestions.css">
+  
 
-    <title>Anniskelupassi</title>
+    <title>Kysymysten hallinta</title>
   </head>
-  <body onLoad="FetchQuestions()">
+  <body onLoad="initEditQuestions()">
     <div id="main-container" class="container">
       <div id="questions-container" class="container">
-
+        <button type="submit" class="btn btn-default" onclick="window.location='/controlpanel.html';">
+        <i class="glyphicon glyphicon-arrow-left"></i>
+      </button>
+      <h3 class="center-y center-x">Kysymysten hallinta</h3>
       	<!-- Add questions button -->
-      	<input id="add_question" type="submit" value="Lisää kysymyksiä" onclick="RevealAdd()">
+      	<input id="add_question" type="submit" class="btn btn-default btn-block" value="Lisää kysymys" onclick="toggleAdd()">
       	<!-- Text boxes for adding questions -->
       	<div id="add_question_inputs" style="display:none">
-      	<input id="question_id" type="text" value="ID(int)">
-      	<input id="question" type="text" value="Kysymys">
-      	<input id="rightAnswer" type="text" value="Oikea vastaus">
-      	<input id="wrongAnswer1" type="text" value="Väärä vastaus">
-      	<input id="wrongAnswer2" type="text" value="Väärä vastaus">
-      	<input id="add_question" type="Submit" value="Lisää kysymys" onclick="AddQuestion()">
-      	</div>
+      	<input id="question_id" type="text" class="form-control text-edit" placeholder="ID(int)">
+      	<input id="question" type="text" class="form-control text-edit" placeholder="Kysymys">
+      	<input id="option1" type="text" class="form-control text-edit" placeholder="Oikea vastaus">
+      	<input id="option2" type="text" class="form-control text-edit" placeholder="Väärä vastaus">
+      	<input id="option3" type="text" class="form-control text-edit" placeholder="Väärä vastaus">
+      	<input id="add_question" type="Submit" class="btn btn-primary btn-block" value="Lisää kysymys" onclick="addQuestion()">
+        <div class="bs-example" data-example-id="hoverable-table">
+    	</div>
 
-        <form action="/check_answers" method="post" id="answers-form">
-        </form>
+      <form action="/check_answers" method="post" id="answers-form">
+      </form>
 
       </div> <!-- questions-container /container -->
     </div> <!-- main-container /container -->

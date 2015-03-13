@@ -13,6 +13,7 @@
 #main-container
 {
 	margin-top: 15px;
+	margin-bottom: 50px;
 	max-width: 850px;
 }
 
@@ -24,6 +25,12 @@
 #footer-container
 {
 	padding: 20px;
+}
+
+#submit-btn
+{
+	height: 50px;
+	margin-bottom: 25px;
 }
 
 .footer {

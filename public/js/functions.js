@@ -1,21 +1,19 @@
-function Init() {
-	FetchQuestions();
-	timerBar();
+// Function for initializing exam.html
+function initExam() {
+	fetchExamQuestions();
+	showTimerBar();
 }
 
-
-/* Hakee kysymykset tietokannasta */
-function FetchQuestions() {
+// Sends request for getting the questions from database
+function fetchExamQuestions() {
 	$.ajax ({
-		url : "haekysymykset",
+		url : "get_questions",
 		dataType :"json",
 		type:"GET",
 
-		/* Jos haku onnistui, siirrytään tähän lohkoon. */
-		/* Success parametri data pitää sisällään haun tulokset array muodossa. */
 		success : function(data) {
-			PrintAllQuestions(data);
-			console.log("Got the questions, printing...");
+			console.log("Got the questions from database.");
+			printExamQuestions(data);
 		},
 
 		error : function(err) {
@@ -24,9 +22,9 @@ function FetchQuestions() {
 	});
 }
 
-/* Shuffles the keys that are used for calling the correct answers. */
-/* Used in PrintAllQuestions(jsonData) */
-/* knuth-shuffle https://github.com/coolaj86/knuth-shuffle */
+// Shuffles the keys that are used for calling the correct answers.
+// Used in PrintAllQuestions(jsonData)
+// knuth-shuffle https://github.com/coolaj86/knuth-shuffle
 function shuffle() {
 	var array = ['option1', 'option2', 'option3'];
 
@@ -48,19 +46,17 @@ function shuffle() {
 
 /* Tulostetaan HTML dokumenttiin FetchQuestions() funktion löytämät rivit */
 /* Placeholder, saa muuttaa ja tulee muuttumaan. */
-function PrintAllQuestions(jsonData) {
+function printExamQuestions(jsonData) {
 	var questionCounter = 1;
 	//console.log('Got ' + jsonData.length + ' items from db.')
 	for (var i = 0; i < jsonData.length; i++) {
 		var answerCounter = 0;
-		//console.log('Adding question : ' + jsonData[i].question);
-		
+
 		// shuffledKeys contains randomized array of keys
 		// option1, option2, option3
 		var shuffledKeys = shuffle();
 		var keyCounter = 0;
-		var depr = "perkele";
-		
+		var depr = "hitsi";
 		
 		$('#answers-form').append(
 			'<label for="question' 
@@ -76,7 +72,7 @@ function PrintAllQuestions(jsonData) {
 
 		$("#question" + jsonData[i]._id).append(
 			'<label class="btn btn-default"><input name="' 
-			+ "question"+jsonData[i]._id  
+			+ "question"+ jsonData[i]._id  
 			+ '" value=' + shuffledKeys[keyCounter] + ' type="radio">'  
 			+ jsonData[i][shuffledKeys[keyCounter]]
 			+ '</input></label>');
@@ -99,9 +95,10 @@ function PrintAllQuestions(jsonData) {
 	}
 }
 
-/* 	Function that gets GET-parameters by name (from URL)
-	URL .../index.html?retry=true
-	getUrlParameter('retry') => 'true'		*/
+// Function that gets GET-parameters by name (from URL)
+// URL .../index.html?retry=true
+// getUrlParameter('retry') => 'true'
+// Used to get login retries in index.html
 function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
@@ -115,8 +112,8 @@ function getUrlParameter(sParam) {
     }
 }
 
-// countdown bar to exam page
-function timerBar(callback) {
+// Progress bar for exam.html
+function showTimerBar(callback) {
     var bar = document.getElementById('progress'),
     // 60s timer
     time = 0, max = 60,

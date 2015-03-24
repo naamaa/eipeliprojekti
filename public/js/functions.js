@@ -29,8 +29,6 @@ function printExamQuestions(jsonData) {
 	for (var i = 0; i < jsonData.length; i++) {
 		var answerCounter = 0;
 
-		console.log(jsonData);
-
 		$('#answers-form').append(
 			'<label for="question' 
 			+ questionCounter 

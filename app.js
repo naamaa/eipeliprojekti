@@ -18,14 +18,29 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 	app.use(express.static(__dirname + '/public'));
 
-	/* GET /haekysymykset */
-	/* Hakee kysymykset tietokannalta ja lähettää ne clientille? Yes? No? */
+	// Gets questions and id's from database (answer is not sent to client)
 	app.get("/get_questions", function(req, res) {
 		var questions = db.collection('questions');
 
 	  	questions.find().toArray(function (err, items) {
-	  		console.log("Sending items to client, I'll let you know if something goes wrong.");
-	  		
+	  		console.log("Sending questions and id's to client, I'll let you know if something goes wrong.");
+
+	  		// I don't think we should send the answer to the client here -Ville
+	  		var response = [];
+  		  	for(var i = 0; i < items.length; i++) {
+		        var obj = items[i];
+		        response.push({"_id" : obj['_id'], "question" : obj['question']});
+		    }
+    		res.send(response);   						
+		});
+	});
+
+	// Gets all question data from database 
+	app.get("/get_questions_all", function(req, res) {
+		var questions = db.collection('questions');
+
+	  	questions.find().toArray(function (err, items) {
+	  		console.log("Sending all question data to client (ADMIN), I'll let you know if something goes wrong.");
     		res.send(items);   						
 		});
 	});
@@ -79,6 +94,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
+	// To be updated - still takes options
 	/* POST /check_answers */
 	/* Iterates through body values. IF the value is 'option1', add 1 point to total scores. */
 	app.post('/check_answers', function(req, res) {
@@ -114,63 +130,53 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		console.log("Got this id:" + id);
 	});
 
-	/* POST /edit_question */
-	app.post('/edit_question', function(req,res){
-		var id= parseInt(req.body._id);
+	// POST /edit_question
+	app.post('/edit_question', function(req,res) {
+		var id = parseInt(req.body._id);
 		var _question = String(req.body.question);
-		var _option1 = String(req.body.option1);
-		var _option2 = String(req.body.option2);
-		var _option3 = String(req.body.option3);
+		var _answer = String(req.body.answer);
 
 		var questions = db.collection('questions');
-		questions.update({_id: id},
-		{
+		questions.update({_id: id}, {
 			question: _question,
-			option1: _option1,
-			option2: _option2,
-			option3: _option3
-		},function(err, result){
-			if(err){
+			answer: _answer,
+		}, function(err, result) {
+			if (err) {
 				console.log(err);
 				res.json({succesful: false});
 			}
-			else if(result){
+			else if (result) {
 				console.log("Updated the question!");
 				res.json({succesful: true});
 			}
-			else if(!result){
+			else if (!result) {
 				console.log("Couldn't find a question with that id.")
 				res.json({succesful: false});
 			}
 		});
 	});
 
-	/*POST /add_question */
-	app.post('/add_question', function(req,res){
-		var id= parseInt(req.body._id);
+	// POST /add_question
+	app.post('/add_question', function(req,res) {
+		var id = parseInt(req.body._id);
 		var _question = String(req.body.question);
-		var _option1 = String(req.body.option1);
-		var _option2 = String(req.body.option2);
-		var _option3 = String(req.body.option3);
+		var _answer = String(req.body.answer);
 
 		var questions = db.collection('questions');
-		questions.insert(
-		{
+		questions.insert( {
 			_id: id,
 			question: _question,
-			option1: _option1,
-			option2: _option2,
-			option3: _option3
-		},function(err, result){
-			if(err){
+			answer: _answer,
+		}, function(err, result) {
+			if (err) {
 				console.log(err);
 				res.json({succesful: false});
 			}
-			else if(result){
+			else if (result) {
 				console.log("Added!");
 				res.json({succesful: true});
 			}
-			else if(!result){
+			else if (!result) {
 				console.log("Couldn't add question.")
 				res.json({succesful: false});
 			}
@@ -178,8 +184,8 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 		var server = app.listen(3000, function () {
-		var host = server.address().address
-		var port = server.address().port
+		var host = server.address().address;
+		var port = server.address().port;
 		console.log('Anniskelupassi: app listening at http://%s:%s', host, port)
 	}) 
 });

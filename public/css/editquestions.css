@@ -16,7 +16,29 @@
 	margin-bottom: 5px;
 }
 
-.text-edit
+.icons-cell
 {
-	margin-bottom: 3px;
+	width: 1px;
+}
+
+.question-cell
+{
+	width: auto;
+}
+
+textarea
+{
+	width: 100%;
+	margin-bottom: 5px;
+	resize: vertical;
+}
+
+.answer-select
+{
+	margin-bottom: 5px;
+}
+
+#add_question_id, #add_question_btn
+{
+	margin-bottom: 5px;
 }

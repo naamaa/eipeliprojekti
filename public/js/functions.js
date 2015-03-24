@@ -13,6 +13,7 @@ function fetchExamQuestions() {
 
 		success : function(data) {
 			console.log("Got the questions from database.");
+			console.log(data);
 			printExamQuestions(data);
 		},
 
@@ -22,42 +23,14 @@ function fetchExamQuestions() {
 	});
 }
 
-// Shuffles the keys that are used for calling the correct answers.
-// Used in PrintAllQuestions(jsonData)
-// knuth-shuffle https://github.com/coolaj86/knuth-shuffle
-function shuffle() {
-	var array = ['option1', 'option2', 'option3'];
-
-	var currentIndex = array.length;
-	var tempValue;
-	var randomIndex;
-
-	while (0 !== currentIndex) {
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex -= 1;
-
-		tempValue = array[currentIndex];
-    	array[currentIndex] = array[randomIndex];
-    	array[randomIndex] = tempValue;
-	}
-	return array;
-}
-
-
-/* Tulostetaan HTML dokumenttiin FetchQuestions() funktion löytämät rivit */
-/* Placeholder, saa muuttaa ja tulee muuttumaan. */
+// Prints the fetched questions with the true/false options
 function printExamQuestions(jsonData) {
 	var questionCounter = 1;
-	//console.log('Got ' + jsonData.length + ' items from db.')
 	for (var i = 0; i < jsonData.length; i++) {
 		var answerCounter = 0;
 
-		// shuffledKeys contains randomized array of keys
-		// option1, option2, option3
-		var shuffledKeys = shuffle();
-		var keyCounter = 0;
-		var depr = "hitsi";
-		
+		console.log(jsonData);
+
 		$('#answers-form').append(
 			'<label for="question' 
 			+ questionCounter 
@@ -68,27 +41,18 @@ function printExamQuestions(jsonData) {
 		$("#answers-form").append(
 			'<div id="question' 
 			+ jsonData[i]._id 
-			+ '" class="btn-group-vertical" data-toggle="buttons"></div><hr/>');
+			+ '" class="btn-group btn-group-justified" data-toggle="buttons"></div><hr/>');
 
 		$("#question" + jsonData[i]._id).append(
-			'<label class="btn btn-default"><input name="' 
+			'<label class="btn btn-success"><input name="' 
 			+ "question"+ jsonData[i]._id  
-			+ '" value=' + shuffledKeys[keyCounter] + ' type="radio">'  
-			+ jsonData[i][shuffledKeys[keyCounter]]
+			+ '" value="true" type="radio">Oikein'
 			+ '</input></label>');
-		keyCounter++;
+
 		$("#question" + jsonData[i]._id).append(
-			'<label class="btn btn-default"><input name="' 
-			+ jsonData[i]._id 
-			+ '" value=' + shuffledKeys[keyCounter] + ' type="radio">'    
-			+ jsonData[i][shuffledKeys[keyCounter]]
-			+ '</input></label>');
-		keyCounter++;
-		$("#question" + jsonData[i]._id).append(
-			'<label class="btn btn-default"><input name="' 
-			+ jsonData[i]._id 
-			+ '" value=' + shuffledKeys[keyCounter] + ' type="radio">'  
-			+ jsonData[i][shuffledKeys[keyCounter]]
+			'<label class="btn btn-danger"><input name="' 
+			+ "question"+ jsonData[i]._id  
+			+ '" value="false" type="radio">Väärin'  
 			+ '</input></label>');
 
 		questionCounter++;				

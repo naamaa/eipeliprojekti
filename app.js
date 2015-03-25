@@ -136,6 +136,13 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		var _question = String(req.body.question);
 		var _answer = String(req.body.answer);
 
+		if (_answer == "Oikein ") 
+			_answer = "true";
+		else if (_answer == "Väärin ")
+			_answer = "false";
+		else
+			res.json({succesful: false});
+
 		var questions = db.collection('questions');
 		questions.update({_id: id}, {
 			question: _question,

@@ -44,7 +44,7 @@ function printQuestionsForEdit(jsonData) {
 		$('#questiontbody').append(
 			'<tr>'
 			// First cell with Edit and Delete buttons (icons)
-			+ '<td class="icons-cell">'
+			+ '<td class="icons">'
 			+ '<div class="input-group">'
 			+ '<div class="input-group-btn">'
      		+ '<button id="edit" class="btn btn-default" type="submit" value="Muokkaa kysymystä" onclick="toggleEdit('
@@ -56,26 +56,40 @@ function printQuestionsForEdit(jsonData) {
     		+ '</td>'
 
     		// Second cell with question label and editing inputs
-    		+ '<td>'
+    		+ '<td class="textarea">'
     		+ '<label id="question_label' + jsonData[i]._id + '" for="question" class="control-label">' + jsonData[i].question + '</label>'
-		  	+ '<div id="'+ jsonData[i]._id + 'edit_question" class="container question-cell" style="display:none"">'
-		  	+ '<textarea id="' + jsonData[i]._id + '_' + 'edit_question_name" class="form-control">' + jsonData[i].question + '</textarea>'
-			+ '<form class="form" role="form">'
-    		+ '<label class="sr-only" for="answer">Answer</label>'
-   			+ '<select class="form-control answer-select" id="answer' + jsonData[i]._id + '" name="answer">'
-   			// Getting answer ("true"/"false") and setting the proper selected option
-   			+ (jsonData[i].answer == "true" ? '<option value="true" selected="selected">Oikein</option>' : '<option value="true">Oikein</option>')
-   			+ (jsonData[i].answer == "false" ? '<option value="true" selected="selected">Väärin</option>' : '<option value="false">Väärin</option>')
-			+ '</select>'
-  			+ '<input id="submit-edit" type="submit" class="btn btn-primary btn-block" value="Tallenna muutokset" onclick="editQuestion(' + jsonData[i]._id + ')">'
-			+ '</form>'
+		  	+ '<div id="question-div" class="container ' + jsonData[i]._id + 'edit_question" style="display:none">'
+		  	+ '<textarea rows="4" id="' + jsonData[i]._id + '_' + 'edit_question_name" class="form-control">' + jsonData[i].question + '</textarea>'
+			+ '</div>'
+			+ '</td>'
+
+			// Third cell (answer/submit cell)
+			// Answer label
+			+ '<td class="answer">'
+			+ '<span id="answer_label' + jsonData[i]._id + '" class="center-block text-center label label'
+			+ (jsonData[i].answer == "true" ? '-success">Oikein' : '-danger">Väärin')
+			+ '</span>'
+			+ '<div class="'+ jsonData[i]._id + 'edit_question" style="display:none">'
+			// Dropdown menu for selection the answer
+			+ '<div class="btn-group">'
+        	+ '<button id="select_answer' + jsonData[i]._id 
+        	+ '" class="center-block text-center btn btn-default dropdown-toggle" name="answer_select" data-toggle="dropdown">'
+        	+ (jsonData[i].answer == "true" ? 'Oikein ' : 'Väärin ')
+        	+ '<span class="caret"></span></button>'
+        	+ '<ul class="dropdown-menu">'
+          	+ '<li><a class="select_answer_option" href="#">Oikein</a></li>'
+          	+ '<li><a class="select_answer_option" href="#">Väärin</a></li>'
+        	+ '</ul>'
+			+ '</div>'
+			// Save-button
+			+ '<input id="submit-edit" type="submit" class="center-block text-center btn btn-primary btn-block" value="Tallenna" onclick="editQuestion(' + jsonData[i]._id + ')">'
 			+ '</div>'
 			+ '</td>'
 			+ '</tr>');
  	} 
  }
  
-/*Show the add question input boxes*/
+// Show the add question input boxes
 function toggleAdd(){
 	if (document.getElementById("add_question_inputs").style.display == "block")
 		document.getElementById("add_question_inputs").style.display = "none";
@@ -107,21 +121,31 @@ function addQuestion(id) {
 // Show the edit input boxes
 // Also hides and shows the question label
 function toggleEdit(id) {
-	if (document.getElementById(id + 'edit_question').style.display == "block") {
-		document.getElementById(id + 'edit_question').style.display = "none";
-		document.getElementById('question_label' + id).style.display = "block";
-	}
-	else if (document.getElementById(id + 'edit_question').style.display == "none") {
-		document.getElementById(id + 'edit_question').style.display = "block";
-		document.getElementById('question_label' + id).style.display = "none";
+	var elements = document.getElementsByClassName(id + 'edit_question');
+	if (elements.length != 0) {
+		if (elements[0].style.display == "block") {
+			for (var i  =0; i < elements.length; i++) {
+			    	elements[i].style.display = "none";
+				}
+			document.getElementById('question_label' + id).style.display = "block";
+			document.getElementById('answer_label' + id).style.display = "block";
+		}
+		else if (elements[0].style.display == "none") {
+			for (var i  =0; i < elements.length; i++) {
+			    	elements[i].style.display = "block";
+				}
+			document.getElementById('question_label' + id).style.display = "none";
+			document.getElementById('answer_label' + id).style.display = "none";
+		}
 	}
 }
 
 // Update edited question to database
 function editQuestion(id) {
 	var newname = document.getElementById(id + '_edit_question_name').value;
-	var answerSelect = document.getElementById("answer" + id);
-	var newanswer = answerSelect.options[answerSelect.selectedIndex].text;
+	var answerSelect = document.getElementById('select_answer' + id );
+	var newanswer = answerSelect.textContent;
+	console.log(" GOT ANSWER : " + answerSelect.textContent);
 
 	$.post('/edit_question',{_id: id, question: newname, answer: newanswer}, function(data) {
 		if (data.succesful == true) {
@@ -133,8 +157,7 @@ function editQuestion(id) {
 		}
 	});
 
-	// Hide edit input after editing
-	document.getElementById(id + 'edit_question').style.display = "none";
+	toggleEdit();
 }
 
 // Confirm delete question
@@ -156,3 +179,15 @@ function deleteQuestion(id) {
 		}
 	});
 }
+
+// Events
+$(document).ready(function() {
+	// Event for changing true/false in select_answer
+	$('body').on('click', 'a.select_answer_option', function() {
+	    var selText = $(this).text();
+	    // This next line, if you remove the space from "selText+' <span class..."
+	    // it doesn't work. If someone knows why, please tell
+	    $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>'); 
+  	});
+
+});

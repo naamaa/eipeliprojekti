@@ -89,3 +89,10 @@ function showTimerBar(callback) {
     }, 1000);
 }
 
+// Toggle visibility of admin login elements
+function toggleAdminLogin() {
+	if (document.getElementById("admin-login").style.display == "block")
+		document.getElementById("admin-login").style.display = "none";
+	else if (document.getElementById("admin-login").style.display == "none")
+		document.getElementById("admin-login").style.display = "block";
+}

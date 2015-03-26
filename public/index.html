@@ -33,9 +33,10 @@
       <input id="loginBtn" class="btn btn-lg btn-primary btn-block" type="submit" value="Kirjaudu" />
     </form>
   </div> <!-- login-container /container -->
-  <hr/>
   <!-- admin -->
   <div class="container login-container">
+    <a class="text-center center-block" href="javascript:toggleAdminLogin();">Olen ylläpitäjä</a>
+    <div id="admin-login" style="display:none">
     <form class="form-signin" action="/login" method="post">
       <h2 class="form-signin-heading center-x">Ylläpitäjä</h2>
       <div id="retryadmin"></div>
@@ -45,15 +46,19 @@
       <input class="form-control" type="password" id="password" name="password" length="12" placeholder="Salasana" required>
       <input id="AdminloginBtn" class="btn btn-lg btn-primary btn-block" type="submit" value="Kirjaudu" />
     </form>
+    </div>
   </div> <!-- login-container /container -->
 
   <script>
+    // retries via URL get-parameters
     var retry = getUrlParameter('retry');
     var retryadmin = getUrlParameter('retryadmin');
     if (retry == "true") 
-      $("#retry").append('<font color="red">Virheellinen koodi</font>');
-    if (retryadmin == "true")
-      $("#retryadmin").append('<font color="red">Virheellinen käyttäjätunnus tai salasana</font>');
+      $("#retry").append('<font class="text-center center-block" color="red">Virheellinen koodi</font>');
+    if (retryadmin == "true") {
+      toggleAdminLogin(); // shows the admin logins on retry since it's hidden by default
+      $("#retryadmin").append('<font class="text-center center-block" color="red">Virheellinen käyttäjätunnus tai salasana</font>');
+    }
   </script>
   </body>
 </html>

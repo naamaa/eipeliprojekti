@@ -1,44 +1,46 @@
-#main-container
-{
+#main-container {
 	margin-top: 15px;
 	max-width: 850px;
 }
 
-#questions-container
-{
+#questions-container {
 	max-width: 100%;
 }
 
-#add_question
-{
+#add_question {
 	width: 100%;
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
 
-.icons-cell
-{
+/* Somehow this 1px makes the buttons fit right in =) */
+td.icons {
 	width: 1px;
 }
 
-.question-cell
-{
+td.textarea {
+	
+}
+
+td.answer {
+	width: 98px;
+}
+
+/* Prevent textarea from overflowing */
+#question-div {
 	width: auto;
 }
 
-textarea
-{
+textarea {
 	width: 100%;
 	margin-bottom: 5px;
 	resize: vertical;
 }
 
-.answer-select
-{
-	margin-bottom: 5px;
+#submit-edit {
+	margin-top: 5px;
 }
 
-#add_question_id, #add_question_btn
-{
+#add_question_id, #add_question_btn {
 	margin-bottom: 5px;
 }

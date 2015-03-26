@@ -94,19 +94,30 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
-	// To be updated - still takes options
+	// 
 	/* POST /check_answers */
-	/* Iterates through body values. IF the value is 'option1', add 1 point to total scores. */
+	/* Compares keys ( user submitted values ) against database values */
+	/* Is it necessary to query the whole database? Probably not, but it's working! -JH*/
 	app.post('/check_answers', function(req, res) {
 		var scores = 0;
-		for (var key in req.body) {
-			console.log("Key " + key + " opens: " + req.body[key]);
-			var value = req.body[key];
-			if (value === "option1") {
-				scores++;
+		var i = 0;
+		var questions = db.collection('questions');
+	
+		questions.find().toArray(function (err, questions) {
+			
+			for (var key in req.body) {
+				if (key != 'button') {
+					var userValue = req.body[key];
+					var databaseValue = questions[i].answer;
+					i++;
+
+					if (userValue === databaseValue) {
+						scores++;
+					}
+				}
 			}
-		}
-		console.log("HOORAY, total points: " + scores);
+			console.log("HOORAY, total points: " + scores);
+		});	
 	});
 
 	/* POST /delete_question */

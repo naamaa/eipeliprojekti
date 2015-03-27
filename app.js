@@ -4,6 +4,7 @@ var path = require("path");
 var MongoClient = require('mongodb').MongoClient
 var bodyParser = require('body-parser');
 var sha1 = require('sha1');
+var autoIncrement = require ('mongodb-autoincrement');
 
 MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, db) {
 	if (err) {
@@ -176,13 +177,12 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 	// POST /add_question
 	app.post('/add_question', function(req,res) {
-		var id = parseInt(req.body._id);
 		var _question = String(req.body.question);
 		var _answer = String(req.body.answer);
-
+		autoIncrement.getNextSequence(db, "questions", function(err, autoIndex){
 		var questions = db.collection('questions');
 		questions.insert( {
-			_id: id,
+			_id: autoIndex,
 			question: _question,
 			answer: _answer,
 		}, function(err, result) {
@@ -199,6 +199,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 				res.json({succesful: false});
 			}
 		});
+	});
 	});
 
 		var server = app.listen(3000, function () {

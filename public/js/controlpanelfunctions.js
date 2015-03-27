@@ -30,7 +30,6 @@ function printQuestionsForEdit(jsonData) {
 
 	$('#add_question_inputs').append(
 			'<textarea id="add_question_question" class="form-control" placeholder="Uusi kysymys"></textarea>'
-			+ '<input id="add_question_id" type="text" class="form-control" placeholder="ID(INT) TMP">'
 			+ '<label class="sr-only" for="answer">Answer</label>'
    			+ '<select class="form-control answer-select" id="add_question_answer" name="answer">'
    			+ '<option value="true" selected="selected">Oikein</option>'
@@ -98,14 +97,13 @@ function toggleAdd(){
 }
 
 // Adds a question to the database
-function addQuestion(id) {
-	var id = document.getElementById("add_question_id").value;
+function addQuestion() {
 	var newquestion = document.getElementById("add_question_question").value;
 	var answerSelect = document.getElementById("add_question_answer");
 	var newanswer = answerSelect.options[answerSelect.selectedIndex].text;
 	var newanswerBoolStr = (newanswer == "Oikein" ? "true" : "false");
 
-	$.post('/add_question', {_id: id, question: newquestion, answer: newanswerBoolStr}, function(data) {
+	$.post('/add_question', {question: newquestion, answer: newanswerBoolStr}, function(data) {
 		if (data.succesful == true) {
 			window.alert("Kysymys lisätty.");
 			location.reload();

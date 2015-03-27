@@ -5,6 +5,11 @@ var MongoClient = require('mongodb').MongoClient
 var bodyParser = require('body-parser');
 var sha1 = require('sha1');
 var autoIncrement = require ('mongodb-autoincrement');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var LocalAPIKeyStrategy =  require('passport-localapikey').Strategy;
 
 MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, db) {
 	if (err) {
@@ -16,8 +21,127 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	/*To use post */
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
-
 	app.use(express.static(__dirname + '/public'));
+
+	/*Passport use stuff for app*/
+	app.use(session({
+		secret: 'to51 5a1a1nen',
+		resave: false,
+		saveUninitialized: true
+		}));
+	app.use(cookieParser());
+	app.use(passport.initialize());
+	app.use(passport.session());
+
+	/*Passport strategy for Admin */ 
+	passport.use(new LocalStrategy(
+  		function(username, password, done) {
+  			console.log("/login REQUEST : admin login data:", username, password);
+			var salt = "0serj9fuhaa09suejdrawserf90hnj23490";
+			var hashpassword = sha1(salt + username + password);
+
+  			var User = db.collection("users");
+    		User.findOne({ user: username }, function(err, user) {
+    			if (err) { 
+    			return done(err);
+    			}
+      			if (!user) {
+        			return done(null, false, { message: 'Incorrect username.' });
+      			}
+      			if (user.password != hashpassword) {
+        			return done(null, false, { message: 'Incorrect password.' });
+      			}
+      			user.group = 'admin';
+      			return done(null, user);
+    		});
+  		}
+	));
+
+	//Passport strategy for logincodes
+	passport.use(new LocalAPIKeyStrategy(
+ 		function(apikey, done) {
+ 		 	var User = db.collection('logincodes');
+    		User.findOne({ logincode: apikey }, function (err, user) {
+     			if (err) {
+     			 return done(err); 
+     			}
+      			if (!user) {
+      			 return done(null, false); 
+      			}
+      			user.group = 'user';
+      			return done(null, user);
+    		});
+  		}
+	));
+	
+	/*serialize */
+	passport.serializeUser(function(user, done) {
+ 		 done(null, user);
+	});
+
+	passport.deserializeUser(function(user, done) {
+    	done(null, user);
+	});
+
+	//Check if user is authenticated
+	var isAuthenticated = function(req,res,next){
+		if(req.isAuthenticated()){
+			return next();
+		}
+		res.redirect('/');
+	}
+	
+	//check the usergroup
+	var loginGroup = function(group){
+		return function(req,res,next){
+			if(req.user && req.user.group === group){
+				next();
+			}
+			else{
+				res.redirect('/');
+			}
+		}
+	}
+
+	//GET for index page
+	app.get('/', function(req,res){
+		res.sendFile("index.html");
+	});
+
+	//GET for control panel
+	app.get('/controlpanel', isAuthenticated, loginGroup('admin'), function(req,res){
+		res.sendFile("controlpanel.html",{root: __dirname + '/public'});
+	});
+
+	//GET for editquestions
+	app.get('/editquestions',isAuthenticated, loginGroup('admin'), function(req,res){
+		res.sendFile("editquestions.html",{root: __dirname + '/public'});
+	});
+
+	//GET for logging out
+	app.get('/logout', function(req,res){
+		req.logout();
+		console.log("Logging out");
+		res.redirect('/');
+	});
+
+	//GET for exam
+	app.get('/exam', isAuthenticated, loginGroup('user'), function(req,res){
+		res.sendFile("exam.html",{root: __dirname + '/public'});
+	});
+
+	/* POST /login */
+	app.post('/login',
+  	passport.authenticate('local', { successRedirect: '/controlpanel',
+                                   failureRedirect: '/?retryadmin=true'})
+	);
+
+	/* POST /loginUser */
+	app.post('/login_user',
+	passport.authenticate('localapikey',{ successRedirect: '/exam', 
+										failureRedirect: '/?retry=true'})
+	);
+	// 
 
 	// Gets questions and id's from database (answer is not sent to client)
 	app.get("/get_questions", function(req, res) {
@@ -46,56 +170,6 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
-	/* POST /login */
-	app.post('/login', function(req, res){
-		console.log("/login REQUEST : admin login data:", req.body.username, req.body.password);
-		/* do stuff for password */
-		var salt = "0serj9fuhaa09suejdrawserf90hnj23490";
-		var username = req.body.username;
-		var password = req.body.password;
-		var hashpassword = sha1(salt + req.body.username + req.body.password);
-		var users = db.collection('users');
-		console.log(hashpassword);
-		/* check if username matches the database */
-		users.findOne( {user: username}, function(err, item) {
-			if (err) {
-				console.log(err);
-				res.redirect("/index.html?retryadmin=true")
-			}
-			/*check if username matches the password */
-			else if (item && item.password == hashpassword) {
-				console.log("Correct login info, redirecting to controlpanel.html")
-				res.redirect("/controlpanel.html");
-			} else {
-				console.log("Wrong password, redirecting to index.html")
-				res.redirect("/index.html?retryadmin=true")
-			}
-
-		});
-	});
-
-	/* POST /loginUser */
-	app.post('/login_user', function(req, res) {
-		console.log("/loginUser REQUEST : user login code: " + req.body.loginCode);
-		/* do stuff for password */
-		var userlogincode = req.body.loginCode;
-		var users = db.collection('logincodes');
-		/* check if username matches the database */
-		users.findOne( {logincode: userlogincode}, function(err, item) {
-			if (err) {
-				console.log(err);
-			} else if (item && item.logincode == userlogincode) {
-				console.log("Correct login code, redirecting to exam.html");
-				res.redirect("/exam.html");
-			} else {
-				console.log("Wrong login code, redirecting to index.html");
-				res.redirect("/index.html?retry=true");
-			}
-			
-		});
-	});
-
-	// 
 	/* POST /check_answers */
 	/* Compares keys ( user submitted values ) against database values */
 	/* Is it necessary to query the whole database? Probably not, but it's working! -JH*/

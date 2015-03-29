@@ -25,18 +25,29 @@
 
     <div id="main-container" class="container">
       <div id="questions-container" class="container">
-        <form action="/check_answers" method="post" id="answers-form">
-          <input name="button" id="submit-btn" class="btn btn-primary btn-block" value="Lähetä vastaukset" type="submit" />
+        <form action="/check_answers" id="answers-form" name="answerform">
+          <!-- original submit button. moved to footer and added submit function
+          <input name="button" id="submit-btn" class="btn btn-primary btn-block" value="Lähetä vastaukset" type="submit" /> -->
         </form>
       </div> <!-- questions-container /container -->
     </div> <!-- main-container /container -->
     <!-- footer  -->
     <footer class="footer">
       <div id="footer-container" class="container">
+        <table width="100%">
+          <tr>
+            <td width="40%" align="center"><h3 id="timer"></h3></td>
+            <td width="20%" align="center"><input name="button" id="submit-btn" class="btn btn-primary btn-lg" value="Lähetä vastaukset" onclick="submitform()"></td>
+            <td width="40%" align="center"><h3 id="counter"></h3></td>
+          </tr>
+        </table>
+        <!-- progress bar
         <div class="progress">
           <div class="progress-bar progress-bar-striped active" id="progress"></div>
         </div>
+        -->
       </div>
     </footer>
   </body>
 </html>
+

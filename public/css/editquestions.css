@@ -1,21 +1,6 @@
-#main-container {
-	margin-top: 15px;
-	max-width: 850px;
-}
-
-#questions-container {
-	max-width: 100%;
-}
-
-#add_question {
-	width: 100%;
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
-
 /* Somehow this 1px makes the buttons fit right in =) */
 td.icons {
-	width: 1px;
+	width: 98px;
 }
 
 td.textarea {
@@ -26,21 +11,46 @@ td.answer {
 	width: 98px;
 }
 
-/* Prevent textarea from overflowing */
-#question-div {
-	width: auto;
-}
-
 textarea {
 	width: 100%;
 	margin-bottom: 5px;
 	resize: vertical;
 }
 
-#submit-edit {
-	margin-top: 5px;
+#main-container {
+	margin-top: 15px;
+	max-width: 850px;
 }
 
-#add_question_id, #add_question_btn {
+#questions-container {
+	width: 100%;
+}
+
+/* Prevent textarea from overflowing */
+#question-div {
+	width: auto;
+}
+
+#add_question {
+	width: 100%;
+	margin-top: 5px;
 	margin-bottom: 5px;
+}
+
+#add_question_id, #add_question_btn, #add_question_answer {
+	margin-bottom: 5px;
+}
+
+#add_question_answer {
+	float: left;
+	width: 24%;
+}
+
+#add_question_btn{
+	width: 75%;
+	float: right;
+}
+
+#submit-edit {
+	margin-top: 5px;
 }

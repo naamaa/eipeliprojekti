@@ -253,27 +253,35 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	app.post('/add_question', function(req,res) {
 		var _question = String(req.body.question);
 		var _answer = String(req.body.answer);
+
+		if (_answer == "Oikein ") 
+			_answer = "true";
+		else if (_answer == "Väärin ")
+			_answer = "false";
+		else
+			res.json({succesful: false});
+
 		autoIncrement.getNextSequence(db, "questions", function(err, autoIndex){
-		var questions = db.collection('questions');
-		questions.insert( {
-			_id: autoIndex,
-			question: _question,
-			answer: _answer,
-		}, function(err, result) {
-			if (err) {
-				console.log(err);
-				res.json({succesful: false});
-			}
-			else if (result) {
-				console.log("Added!");
-				res.json({succesful: true});
-			}
-			else if (!result) {
-				console.log("Couldn't add question.")
-				res.json({succesful: false});
-			}
+			var questions = db.collection('questions');
+			questions.insert( {
+				_id: autoIndex,
+				question: _question,
+				answer: _answer,
+			}, function(err, result) {
+				if (err) {
+					console.log(err);
+					res.json({succesful: false});
+				}
+				else if (result) {
+					console.log("Added!");
+					res.json({succesful: true});
+				}
+				else if (!result) {
+					console.log("Couldn't add question.")
+					res.json({succesful: false});
+				}
+			});
 		});
-	});
 	});
 
 		var server = app.listen(3000, function () {

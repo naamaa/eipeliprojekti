@@ -110,12 +110,12 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 	//GET for control panel
 	app.get('/controlpanel', isAuthenticated, loginGroup('admin'), function(req,res){
-		res.sendFile("controlpanel.html",{root: __dirname + '/public'});
+		res.sendFile("controlpanel.html",{root: __dirname + '/private'});
 	});
 
 	//GET for editquestions
 	app.get('/editquestions',isAuthenticated, loginGroup('admin'), function(req,res){
-		res.sendFile("editquestions.html",{root: __dirname + '/public'});
+		res.sendFile("editquestions.html",{root: __dirname + '/private'});
 	});
 
 	//GET for logging out
@@ -127,7 +127,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 	//GET for exam
 	app.get('/exam', isAuthenticated, loginGroup('user'), function(req,res){
-		res.sendFile("exam.html",{root: __dirname + '/public'});
+		res.sendFile("exam.html",{root: __dirname + '/private'});
 	});
 
 	/* POST /login */

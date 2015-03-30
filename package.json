@@ -6,15 +6,19 @@
         "start": "node ./bin/www"
     },
     "dependencies": {
-        "express": "~4.0.0",
-        "serve-favicon": "*",
-        "morgan": "~1.0.0",
-        "cookie-parser": "~1.0.1",
         "body-parser": "~1.0.0",
+        "cookie-parser": "~1.0.1",
         "debug": "~0.7.4",
-        "jade": "*",
-        "mongodb": "*",
+        "express": "4.8.x",
+        "express-session": "*",
+        "mongodb": "~1.4",
+        "mongodb-autoincrement": "",
         "mongoskin": "*",
-        "sha1": ""
+        "morgan": "~1.0.0",
+        "passport": "*",
+        "passport-local": "*",
+        "passport-localapikey": "*",
+        "serve-favicon": "*",
+        "sha1": "*"
     }
 }

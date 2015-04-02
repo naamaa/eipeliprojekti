@@ -25,7 +25,7 @@ function fetchExamQuestions() {
 
 // Prints the fetched questions with the true/false options
 function printExamQuestions(jsonData) {
-	var counterString = "0/16";
+	var counterString = "0/" + jsonData.length;
 	document.getElementById("counter").innerHTML = counterString;
 	var questionCounter = 1;
 	for (var i = 0; i < jsonData.length; i++) {
@@ -62,7 +62,7 @@ function printExamQuestions(jsonData) {
 		$(document).ready(function(){
 			$('input:radio').change(function(){
 				var checkedRadio = $('input:radio:checked').length;
-				counterString = checkedRadio+"/16";
+				counterString = checkedRadio+"/" + jsonData.length;
 				document.getElementById("counter").innerHTML = counterString;
 			})
 		});	

@@ -130,6 +130,21 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		res.sendFile("exam.html",{root: __dirname + '/private'});
 	});
 
+	//GET for examcontrol
+	app.get('/examcontrol', isAuthenticated, loginGroup('admin'), function(req,res){
+		res.sendFile("examcontrol.html",{root: __dirname + '/private'});
+	});
+
+	//GET for results
+	app.get('/results', isAuthenticated, loginGroup('admin'), function(req,res){
+		res.sendFile("results.html",{root: __dirname + '/private'});
+	});
+
+	//GET for usercontrol
+	app.get('/usercontrol', isAuthenticated, loginGroup('admin'), function(req,res){
+		res.sendFile("usercontrol.html",{root: __dirname + '/private'});
+	});
+
 	/* POST /login */
 	app.post('/login',
   	passport.authenticate('local', { successRedirect: '/controlpanel',
@@ -140,8 +155,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	app.post('/login_user',
 	passport.authenticate('localapikey',{ successRedirect: '/exam', 
 										failureRedirect: '/?retry=true'})
-	);
-	// 
+	); 
 
 	// Gets questions and id's from database (answer is not sent to client)
 	app.get("/get_questions", function(req, res) {
@@ -263,6 +277,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 		autoIncrement.getNextSequence(db, "questions", function(err, autoIndex){
 			var questions = db.collection('questions');
+			console.log("Adding question with autoIndex ID : " + autoIndex);
 			questions.insert( {
 				_id: autoIndex,
 				question: _question,

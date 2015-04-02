@@ -13,23 +13,21 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <!-- Javascript -->
+    <script src="js/functions.js"></script>
+    <script src="js/controlpanelfunctions.js"></script>
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="css/controlpanel.css">
     <link rel="stylesheet" tpye="text/css" href="css/styles.css">
-
-    <title>Hallintapaneeli</title>
+    <link rel="stylesheet" tpye="text/css" href="css/examcontrol.css">
+  
+    <title>Kokeiden hallinta</title>
   </head>
   <body>
     <div id="main-container" class="container">
-      <h3 class="center-x center-y">Hallintapaneeli</h3>
-    <ul class="list-group">
-        <a class="center-x center-y list-group-item" href="/editquestions">Kysymysten hallinta</a>
-        <a class="center-x center-y list-group-item" href="/examcontrol">Kokeiden hallinta</a>
-        <a class="center-x center-y list-group-item" href="/results">Tulokset</a>
-        <a class="center-x center-y list-group-item" href="/usercontrol">Käyttäjähallinta</a>
-        <a class="center-x center-y list-group-item" href="/logout">Kirjaudu ulos</a>
-    </ul>
-  </div>
-
+      <h3 class="center-y center-x">Kysymysten hallinta</h3>
+      <button class="btn btn-primary btn-block" onClick="createExam()">Luo koekerta</button>
+      <div id="active-exams">
+      </div>
+      
+    </div> <!-- main-container /container -->
   </body>
 </html>

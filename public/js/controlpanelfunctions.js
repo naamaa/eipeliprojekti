@@ -51,7 +51,7 @@ function printQuestionsForEdit(jsonData) {
 			+ '<td class="icons">'
 			+ '<div class="btn-group inline">'
 			//+ '<div class="input-group-btn">'
-     		+ '<button id="edit" class="btn btn-default" type="submit" value="Muokkaa kysymystä" onclick="toggleEdit('
+     		+ '<button id="edit" class="btn btn-default toggleable" type="submit" value="Muokkaa kysymystä" onclick="toggleEdit('
  			+ jsonData[i]._id + ')"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
       		+ '<button id="delete" class="btn btn-default" type="submit" value="Poista kysymys" onclick="confirmDelete('
 			+ jsonData[i]._id + ')"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
@@ -181,6 +181,10 @@ function deleteQuestion(id) {
 	});
 }
 
+function createExam() {
+	console.log("CALLIN CREATEEXAM");
+}
+
 // Events
 $(document).ready(function() {
 	// Event for changing true/false in select_answer
@@ -190,5 +194,20 @@ $(document).ready(function() {
 	    // it doesn't work. If someone knows why, please tell
 	    $(this).parents('.dropdown').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>'); 
   	});
+
+  	//$('.toggleable').button('toggle').addClass('active');
+
+  	$('body').on('click', '.toggleable', function() {
+  		console.log("got the toggle click");
+  		$(this).blur();
+  		if ($(this).hasClass('active')) {
+	    	$(this).removeClass('active');
+	    	$(this).css("background-color", "#FFF");
+	    }
+	    else {
+	    	$(this).addClass('active');
+	    	$(this).css("background-color", "#e6e6e6");
+	    }
+  	});	
 
 });

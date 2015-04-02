@@ -1,6 +1,13 @@
+textarea {
+	width: 100%;
+	margin-bottom: 5px;
+	resize: vertical;
+}
+
 /* Somehow this 1px makes the buttons fit right in =) */
 td.icons {
 	width: 98px;
+	min-width: 98px;
 }
 
 td.textarea {
@@ -11,11 +18,10 @@ td.answer {
 	width: 98px;
 }
 
-textarea {
-	width: 100%;
-	margin-bottom: 5px;
-	resize: vertical;
+.toggleable:active {
+    
 }
+
 
 #main-container {
 	margin-top: 15px;

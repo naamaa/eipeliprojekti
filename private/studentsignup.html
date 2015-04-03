@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <style>
+    body        { padding-top:80px; }
+  </style>
+  
+    <!-- Bootstrap & jquery -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> <!-- fonts icons and such -->
+ 
+    
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="css/">
+
+   
+    
+    <title>Opiskelijan rekisteröinti</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-md-6 col-md-offset-4">
+       <div class="col-md-7">
+        <h1><i class="fa fa-pencil-square-o"></i> Henkilötiedot</h1>
+       
+
+        <form action="/studentsignup" method="post" name="student-registration-form">
+        
+          <div class="form-group">
+            <label>Etunimi</label>
+            <input type="text" class="form-control" name="firstname" >
+          </div>
+
+          <div class="form-group">
+            <label>Sukunimi</label>
+            <input type="text" class="form-control" name="lastname">
+          </div>
+
+          <div class="form-group">
+            <label>Henkilötunnus</label>
+            <input type="text" class="form-control" name="ssn" placeholder="150790-123D">
+          </div>
+
+          <div class="form-group">
+            <label>Sähköposti</label>
+            <input type="text" class="form-control" name="email">
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-default">Rekisteröidy</button>
+          </div>
+        </div>
+
+        
+
+        </form>
+      </div>
+    </div>
+
+
+
+  </body>
+</html>

@@ -145,6 +145,11 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		res.sendFile("usercontrol.html",{root: __dirname + '/private'});
 	});
 
+	//GET for studentsignup
+	app.get('/studentsignup', function(req, res) {
+		res.sendFile("studentsignup.html", {root : __dirname + '/private'});
+	});
+
 	/* POST /login */
 	app.post('/login',
   	passport.authenticate('local', { successRedirect: '/controlpanel',
@@ -296,6 +301,44 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 					res.json({succesful: false});
 				}
 			});
+		});
+	});
+
+	// POST /studentsignup
+	app.post('/studentsignup', function(req, res) {
+		
+		// student's personal data
+		var firstname = req.body.firstname;
+		var lastname = req.body.lastname;
+		var ssn = req.body.ssn;
+		var email = req.body.email;
+	
+
+		autoIncrement.getNextSequence(db, "students", function(err, autoIndex) {
+			var students = db.collection('students');
+			console.log('Adding student with autoIndex ID : ' + autoIndex);
+			students.insert( {
+				_id: autoIndex,
+				signupDate: new Date(),
+				firstname: firstname,
+				lastname: lastname,
+				ssn: ssn,
+				email: email
+			}, function(err, result) {
+				if (err) {
+					console.log(err);
+					res.json({succesful: false});
+				}
+				else if (result) {
+					console.log("Student added!");
+					res.json({succesful: true});
+				}
+				else if (!result) {
+					console.log("Couldn't add student.")
+					res.json({succesful: false});
+				}
+			});
+
 		});
 	});
 

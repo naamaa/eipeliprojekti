@@ -253,7 +253,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
-	// POST - Gets exam by ID from database
+	// GET - Gets exam by ID from database
 	app.get("/examinfo/get_exam/:examid", function(req, res) {
 		var exams = db.collection('exams');
 		examid = req.params.examid;
@@ -264,7 +264,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
-	// POST - Gets students by exam ID from database (for examinfo.html)
+	// GET - Gets students by exam ID from database (for examinfo.html)
 	app.get("/examinfo/get_studentsbyexamid/:examid", function(req, res) {
 		var students = db.collection('students');
 		examid = req.params.examid;
@@ -274,6 +274,15 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 			res.send(items);
 		});
 	});
+
+	app.get("/stopexam/:examid", function(req, res) {
+			var exams = db.collection('exams');
+			examid = req.params.examid;
+
+		  	exams.findOne({_id : parseInt(examid)}, function(err, exam) {
+		  		//asdasdasd
+			});
+		});
 
 	// Gets all question data from database 
 	app.get("/get_questions_all", function(req, res) {

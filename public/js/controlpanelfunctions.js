@@ -96,9 +96,6 @@ function printStudentsByExam(jsonData) {
 
 // examinfo.html function for printing exam information
 function printExamInfo(jsonData) {
-	$('exam-container').append(
-		'asd'
-	);
 }
 
 // examcontrol.html function for listing the exams
@@ -297,6 +294,12 @@ function createExam() {
 		else if (data.succesful == false) {
 			window.alert("Koekerran luonti onnistui");
 		}
+	});
+}
+
+function endExam() {
+	$.get('/stopexam/' + getUrlParameter('id'), function(data){
+		console.log(data);
 	});
 }
 

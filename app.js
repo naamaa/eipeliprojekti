@@ -136,6 +136,11 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		res.sendFile("examcontrol.html",{root: __dirname + '/private'});
 	});
 
+	//GET for examinfo/<examid>
+	app.get('/examinfo/*', isAuthenticated, loginGroup('admin'), function(req,res){
+		res.sendFile("examinfo.html",{root: __dirname + '/private'});
+	});
+
 	//GET for results
 	app.get('/results', isAuthenticated, loginGroup('admin'), function(req,res){
 		res.sendFile("results.html",{root: __dirname + '/private'});
@@ -396,13 +401,12 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 					res.json({succesful: false});
 				}
 			});
-
 		});
 	});
 
-		var server = app.listen(3000, function () {
-		var host = server.address().address;
-		var port = server.address().port;
-		console.log('Anniskelupassi: app listening at http://%s:%s', host, port)
+	var server = app.listen(3000, function () {
+	var host = server.address().address;
+	var port = server.address().port;
+	console.log('Anniskelupassi: app listening at http://%s:%s', host, port)
 	}) 
 });

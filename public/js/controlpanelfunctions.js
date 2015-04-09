@@ -116,15 +116,15 @@ function printStudentsByExam(jsonData) {
 
 // examinfo.html function for printing exam information
 function printExamInfo(jsonData) {
-	var startdate = new Date(jsonData.starttime);
-	var enddate;
+	var starttime = new Date(jsonData.starttime);
+	var endtime;
 	if (jsonData.endtime == 'false') {
 		$('#exam-container').append(
 			'<h4 class="text-center"><b>Kirjautumiskoodi: ' + jsonData.loginid + '</b></h4>'
 		);
 	}
 	else {
-		enddate = new Date(jsonData.endtime);
+		endtime = new Date(jsonData.endtime);
 		$('#exam-container').append(
 			'<h4 class="text-center"><b>Koe on päättynyt</b></h4>'
 		);

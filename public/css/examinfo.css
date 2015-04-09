@@ -1,6 +1,6 @@
 #main-container {
 	margin-top: 15px;
-	max-width: 400px;
+	max-width: 600px;
 }
 
 #exam-container {
@@ -9,5 +9,9 @@
 }
 
 #students-container {
-	
+
+}
+
+#endExamBtn {
+	width: 40%;
 }

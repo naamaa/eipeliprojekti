@@ -89,13 +89,65 @@ function fetchQuestionsForEdit() {
 
 // examinfo.html function for printing students that participate in the exam
 function printStudentsByExam(jsonData) {
-	$('students-container').append(
-		'asd'
+	$('#students-container').append(
+	    '<table id="questiontable" class="table table-bordered table-striped">'
+      	+ '<tbody id="questiontbody"></tbody></table>'
 	);
+
+	for (var i = 0; i < jsonData.length; i++) {
+		$('#questiontbody').append(
+			'<tr>'
+
+			+ '<td>'
+			+ jsonData[i].lastname
+    		+ '</td>'
+
+
+    		+ '<td>'
+			+ jsonData[i].firstname
+			+ '</td>'
+
+
+			+ '<td>'
+			+ jsonData[i].signupDate
+			+ '</td>'
+
+
+			+ '<td>'
+			+ (jsonData[i].id_check == 'false' ? '<span class="label label-warning">Odottaa hyväksyntää</span>' : '<span class="label label-success">Tulos tähän</span>')
+			+ '</td>'
+
+			+ '</tr>');
+ 	} 
 }
 
 // examinfo.html function for printing exam information
 function printExamInfo(jsonData) {
+	if (jsonData.endtime == 'false') {
+		$('#exam-container').append(
+			'<h4 class="text-center"><b>Kirjautumiskoodi: ' + jsonData.loginid + '</b></h4>'
+		);
+	}
+	else {
+		$('#exam-container').append(
+			'<h4 class="text-center"><b>Koe on päättynyt</b></h4>'
+		);
+	}
+	$('#exam-container').append(
+		'<p class="text-center"><span class="glyphicon glyphicon-time" aria-hidden="true">&nbsp;</span>'
+		+ jsonData.starttime + " - " + (jsonData.endtime != "false" ? jsonData.endtime : "")
+		+ '</p>'
+		+ '<p class="text-center"><span class="glyphicon glyphicon-user" aria-hidden="true">&nbsp;</span>'
+		+ jsonData.admin
+	);
+
+	if (jsonData.endtime == 'false') {
+		$('#exam-container').append(
+			'<div class="span7 text-center">'
+			+ '<button id="endExamBtn" class="btn btn-primary" onClick="endExam()">Lopeta koe</button>'
+    		+ '</div>'
+    	);
+	}
 }
 
 // examcontrol.html function for listing the exams

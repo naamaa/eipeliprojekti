@@ -162,6 +162,61 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 										failureRedirect: '/?retry=true'})
 	); 
 
+/* POST/create_exam  creates unique cutting edge login code for user and inserts it to database. Also administrator name must be given and starttime */
+
+	app.post('/create_exam', function(req,res){
+
+			autoIncrement.getNextSequence(db, "exams", function(err, autoIndex){
+			var exams = db.collection('exams');
+			var id = autoIndex;
+
+			var create_logincode = function(){
+
+				var logincode = Math.floor(Math.random() * 9000) + 1000;    		
+				var found = false;
+				exams.count({ loginid: logincode }, function (err, count) {
+     			if(count > 1){
+     				found = true;
+     			}
+     			else{
+     				found = false;
+     			}
+    		});
+			if(found){
+				create_logincode();
+			}
+			if(!found){
+				return logincode;
+			}
+			};
+
+			var loginid = create_logincode();
+			console.log("LoginID:" + loginid);
+			console.log("Adding exam with ID : " + autoIndex);
+			exams.insert( {
+				_id: id,
+				loginid: loginid,
+				admin: req.body.admin,
+				starttime: req.body.starttime,
+				endtime: "false",
+				students:  ""
+			}, function(err, result) {
+				if (err) {
+					console.log(err);
+					res.json({succesful: false});
+				}
+				else if (result) {
+					console.log("Added!");
+					res.json({succesful: true});
+				}
+				else if (!result) {
+					console.log("Couldn't add exam.")
+					res.json({succesful: false});
+				}
+			});
+		});
+	});
+	
 	// Gets questions and id's from database (answer is not sent to client)
 	app.get("/get_questions", function(req, res) {
 		var questions = db.collection('questions');

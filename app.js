@@ -243,6 +243,16 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	// Gets all question data from database 
+	app.get("/get_exams", function(req, res) {
+		var exams = db.collection('exams');
+	
+	  	exams.find().toArray(function (err, items) {
+	  		console.log("Sending all exam data to client (ADMIN), I'll let you know if something goes wrong.");
+	 		res.send(items);		
+		});
+	});
+
+	// Gets all question data from database 
 	app.get("/get_questions_all", function(req, res) {
 		var questions = db.collection('questions');
 

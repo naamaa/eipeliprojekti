@@ -137,7 +137,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	//GET for examinfo/<examid>
-	app.get('/examinfo/*', isAuthenticated, loginGroup('admin'), function(req,res){
+	app.get('/examinfo/id=*', isAuthenticated, loginGroup('admin'), function(req,res){
 		res.sendFile("examinfo.html",{root: __dirname + '/private'});
 	});
 

@@ -95,28 +95,21 @@ function printStudentsByExam(jsonData) {
 	);
 
 	for (var i = 0; i < jsonData.length; i++) {
+		var signupDate = new Date(jsonData[i].signupDate);
 		$('#questiontbody').append(
 			'<tr>'
-
 			+ '<td>'
 			+ jsonData[i].lastname
     		+ '</td>'
-
-
     		+ '<td>'
 			+ jsonData[i].firstname
 			+ '</td>'
-
-
 			+ '<td>'
-			+ jsonData[i].signupDate
+			+ jsonData[i].signupDate.toLocaleString()
 			+ '</td>'
-
-
 			+ '<td>'
 			+ (jsonData[i].id_check == 'false' ? '<span class="label label-warning">Odottaa hyväksyntää</span>' : '<span class="label label-success">Tulos tähän</span>')
 			+ '</td>'
-
 			+ '</tr>');
  	} 
 }
@@ -354,7 +347,8 @@ function createExam() {
 
 function endExam() {
 	$.get('/stopexam/' + getUrlParameter('id'), function(data){
-		console.log(data);
+		alert("Koe poistettu");
+		location.reload();
 	});
 }
 

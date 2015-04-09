@@ -105,7 +105,7 @@ function printStudentsByExam(jsonData) {
 			+ jsonData[i].firstname
 			+ '</td>'
 			+ '<td>'
-			+ jsonData[i].signupDate.toLocaleString()
+			+ signupDate
 			+ '</td>'
 			+ '<td>'
 			+ (jsonData[i].id_check == 'false' ? '<span class="label label-warning">Odottaa hyväksyntää</span>' : '<span class="label label-success">Tulos tähän</span>')

@@ -116,19 +116,22 @@ function printStudentsByExam(jsonData) {
 
 // examinfo.html function for printing exam information
 function printExamInfo(jsonData) {
+	var startdate = new Date(jsonData.starttime);
+	var enddate;
 	if (jsonData.endtime == 'false') {
 		$('#exam-container').append(
 			'<h4 class="text-center"><b>Kirjautumiskoodi: ' + jsonData.loginid + '</b></h4>'
 		);
 	}
 	else {
+		enddate = new Date(jsonData.endtime);
 		$('#exam-container').append(
 			'<h4 class="text-center"><b>Koe on päättynyt</b></h4>'
 		);
 	}
 	$('#exam-container').append(
 		'<p class="text-center"><span class="glyphicon glyphicon-time" aria-hidden="true">&nbsp;</span>'
-		+ jsonData.starttime + " - " + (jsonData.endtime != "false" ? jsonData.endtime : "")
+		+ starttime.toLocaleString() + " - " + (jsonData.endtime != "false" ? endtime.toLocaleString() : "")
 		+ '</p>'
 		+ '<p class="text-center"><span class="glyphicon glyphicon-user" aria-hidden="true">&nbsp;</span>'
 		+ jsonData.admin

@@ -152,7 +152,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	//GET for studentsignup
-	app.get('/studentsignup', function(req, res) {
+	app.get('/studentsignup', isAuthenticated, loginGroup('user'),function(req, res) {
 		res.sendFile("studentsignup.html", {root : __dirname + '/private'});
 	});
 
@@ -170,7 +170,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 /* GET/create_exam  creates unique cutting edge login code for user and inserts it to database. Also administrator name must be given and starttime */
 
-	app.get('/create_exam', function(req,res){
+	app.get('/create_exam', isAuthenticated, loginGroup('admin'),function(req,res){
 
 			autoIncrement.getNextSequence(db, "exams", function(err, autoIndex){
 			var exams = db.collection('exams');
@@ -226,7 +226,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 	
 	// Gets questions and id's from database (answer is not sent to client)
-	app.get("/get_questions", function(req, res) {
+	app.get("/get_questions",isAuthenticated, loginGroup('user'), function(req, res) {
 		var questions = db.collection('questions');
 
 	  	questions.find().toArray(function (err, items) {
@@ -243,7 +243,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	// Gets all exam data from database 
-	app.get("/get_exams", function(req, res) {
+	app.get("/get_exams", isAuthenticated, loginGroup('admin'), function(req, res) {
 		var exams = db.collection('exams');
 		var examid = req.body.examid;
 	
@@ -254,7 +254,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	// GET - Gets exam by ID from database
-	app.get("/examinfo/get_exam/:examid", function(req, res) {
+	app.get("/examinfo/get_exam/:examid", isAuthenticated, loginGroup('admin'), function(req, res) {
 		var exams = db.collection('exams');
 		examid = req.params.examid;
 
@@ -265,7 +265,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	// GET - Gets students by exam ID from database (for examinfo.html)
-	app.get("/examinfo/get_studentsbyexamid/:examid", function(req, res) {
+	app.get("/examinfo/get_studentsbyexamid/:examid", isAuthenticated, loginGroup('admin'), function(req, res) {
 		var students = db.collection('students');
 		examid = req.params.examid;
 
@@ -275,17 +275,31 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
-	app.get("/stopexam/:examid", function(req, res) {
+	app.get("/stopexam/:examid", isAuthenticated, loginGroup('admin'), function(req, res) {
 			var exams = db.collection('exams');
 			examid = req.params.examid;
-
-		  	exams.findOne({_id : parseInt(examid)}, function(err, exam) {
-		  		//asdasdasd
-			});
+		  	exams.update({_id : parseInt(examid)},  { $set:
+		  	{
+			endtime: new Date()
+			}
+		}, function(err, result) {
+			if (err) {
+				console.log(err);
+				res.json({succesful: false});
+			}
+			else if (result) {
+				console.log("Updated end time. Exam has now ended");
+				res.json({succesful: true});
+			}
+			else if (!result) {
+				console.log("Couldn't find a exam with that id.")
+				res.json({succesful: false});
+			}
 		});
+	});
 
 	// Gets all question data from database 
-	app.get("/get_questions_all", function(req, res) {
+	app.get("/get_questions_all", isAuthenticated, loginGroup('admin'), function(req, res) {
 		var questions = db.collection('questions');
 
 	  	questions.find().toArray(function (err, items) {
@@ -297,7 +311,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	/* POST /check_answers */
 	/* Compares keys ( user submitted values ) against database values */
 	/* Is it necessary to query the whole database? Probably not, but it's working! -JH*/
-	app.post('/check_answers', function(req, res) {
+	app.post('/check_answers', isAuthenticated, loginGroup('user'), function(req, res) {
 		var scores = 0;
 		var i = 0;
 		var questions = db.collection('questions');
@@ -317,10 +331,11 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 			}
 			console.log("HOORAY, total points: " + scores);
 		});	
+
 	});
 
 	/* POST /delete_question */
-	app.post('/delete_question', function(req,res){
+	app.post('/delete_question',isAuthenticated, loginGroup('admin'), function(req,res){
 		var id = parseInt(req.body._id);
 		var questions = db.collection('questions');
 		questions.remove({_id: id}, function(err, result){
@@ -341,7 +356,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	// POST /edit_question
-	app.post('/edit_question', function(req,res) {
+	app.post('/edit_question',isAuthenticated, loginGroup('admin'), function(req,res) {
 		var id = parseInt(req.body._id);
 		var _question = String(req.body.question);
 		var _answer = String(req.body.answer);
@@ -374,7 +389,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	// POST /add_question
-	app.post('/add_question', function(req,res) {
+	app.post('/add_question',isAuthenticated, loginGroup('admin'), function(req,res) {
 		var _question = String(req.body.question);
 		var _answer = String(req.body.answer);
 
@@ -410,7 +425,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	// POST /studentsignup
-	app.post('/studentsignup', function(req, res) {
+	app.post('/studentsignup',isAuthenticated, loginGroup('user'), function(req, res) {
 		
 		// student's personal data
 		var firstname = req.body.firstname;
@@ -431,7 +446,8 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 				email: email,
 				answer_sent: "false",
 				id_check: "false",
-				examid: examid
+				examid: examid,
+				result: ""
 			}, function(err, result) {
 				if (err) {
 					console.log(err);

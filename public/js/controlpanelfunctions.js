@@ -100,16 +100,19 @@ function printExamInfo(jsonData) {
 
 // examcontrol.html function for listing the exams
 function printExams(jsonData) {
+
 	$('#exams-container').append(
 	'<div id="exams" class="list-group">'
 	+ '</div>');
 
 	for (var i = 0; i < jsonData.length; i++) {
+		var startdate = new Date(jsonData[i].starttime);
+		var enddate = new Date(jsonData[i].endtime);
 		if (jsonData[i].endtime == 'false') {
 			$('#exams').append(
 			  	'<a href="/examinfo/?id=' + jsonData[i]._id + '" class="list-group-item list-group-item-info">'
 			  	+ '<h4 class="text-center"><b>' + jsonData[i].loginid + "</b></h4>"
-			  	+ '<p class="text-center"> Aloitettu: ' + jsonData[i].starttime + "</p>"
+			  	+ '<p class="text-center"> Aloitettu: ' + startdate.toLocaleString() +"</p>"
 		  	 	+ '<p class="text-center">Osallistujia: ' + jsonData[i].students
 		  	 	+ ' - Tekijä: ' + jsonData[i].admin + "</p>"
 			  	+ '</a>'
@@ -118,7 +121,7 @@ function printExams(jsonData) {
 		else {
 		$('#exams').append(
 			  	'<a href="/examinfo/?id=' + jsonData[i]._id + '" class="list-group-item disabled">'
-			  	+ '<p class="text-center">Ajankohta: ' + jsonData[i].starttime + " - " + jsonData[i].starttime + "</p>"
+			  	+ '<p class="text-center">Ajankohta: ' + startdate.toLocaleString() + " - " + enddate.toLocaleString() + "</p>"
 		  	 	+ '<p class="text-center">Osallistujia: ' + jsonData[i].students
 		  	 	+ ' - Tekijä: ' + jsonData[i].admin + "</p>"
 			  	+ '</a>'

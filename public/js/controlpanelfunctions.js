@@ -1,8 +1,28 @@
 /* This file is for functions in controlpanel */ 
 
-function initEditQuestions()
-{
+function initEditQuestions() {
 	fetchQuestionsForEdit();
+}
+
+function initExamControl() {
+	fetchExams();
+}
+
+function fetchExams() {
+	$.ajax ({
+		url : "get_exams",
+		dataType :"json",
+		type:"GET",
+
+		success : function(data) {
+			console.log("Got the exams from database.");
+			printExams(data);
+		},
+
+		error : function(err) {
+			console.log(err);				
+		}
+	});
 }
 
 // Sends request for getting the questions from database
@@ -21,6 +41,47 @@ function fetchQuestionsForEdit() {
 			console.log(err);				
 		}
 	});
+}
+
+// examcontrol.html function for listing the exams
+function printExams(jsonData) {
+	$('#exams-container').append(
+	'<div id="exams" class="list-group">'
+	+ '</div>');
+
+	for (var i = 0; i < jsonData.length; i++) {
+		if (jsonData[i].endtime == 'false') {
+			$('#exams').append(
+			  	'<a href="#" class="list-group-item list-group-item-info">'
+			  	+ '<h4 class="text-center"><b>' + jsonData[i].loginid + "</b></h4>"
+			  	+ '<p class="text-center"> Aloitettu: ' + jsonData[i].starttime + "</p>"
+		  	 	+ '<p class="text-center">Osallistujia: ' + jsonData[i].students
+		  	 	+ ' - Tekijä: ' + jsonData[i].admin + "</p>"
+			  	+ '</a>'
+			);
+		}
+		else {
+		$('#exams').append(
+			  	'<a href="#" class="list-group-item disabled">'
+			  	+ '<p class="text-center">Alkoi: ' + jsonData[i].starttime + "</p>"
+			  	+ '<p class="text-center">Päättyi: ' + jsonData[i].starttime + "</p>"
+		  	 	+ '<p class="text-center">Osallistujia: ' + jsonData[i].students
+		  	 	+ ' - Tekijä: ' + jsonData[i].admin + "</p>"
+			  	+ '</a>'
+			);
+		}
+	}
+/*
+  	+ '<a href="#" class="list-group-item active">'
+    + 'Cras justo odio'
+  	+ '</a>'
+  	+ '<a href="#" class="list-group-item">Dapibus ac facilisis in</a>'
+  	+ '<a href="#" class="list-group-item">Morbi leo risus</a>'
+  	+ '<a href="#" class="list-group-item">Porta ac consectetur ac</a>'
+  	+ '<a href="#" class="list-group-item">Vestibulum at eros</a>'
+*/
+
+	
 }
 
 function printQuestionsForEdit(jsonData) {
@@ -211,3 +272,4 @@ $(document).ready(function() {
   	});	
 
 });
+

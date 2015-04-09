@@ -117,20 +117,3 @@ function toggleAdminLogin() {
 	else if (document.getElementById("admin-login").style.display == "none")
 		document.getElementById("admin-login").style.display = "block";
 }
-
-/*
-// Progress bar for exam.html
-function showTimerBar(callback) {
-    var bar = document.getElementById('progress'),
-    // 60s timer
-    time = 0, max = 60,
-    int = setInterval(function() {
-        bar.style.width = Math.floor(100 * time++ / max) + '%';
-        if (time - 1 == max) {
-            clearInterval(int);
-            // 100ms delay between new draw
-            callback && setTimeout(callback, 100);
-        }
-    }, 1000);
-}
-*/

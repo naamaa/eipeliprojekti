@@ -8,6 +8,50 @@ function initExamControl() {
 	fetchExams();
 }
 
+function initExamInfo() {
+    var examid = getUrlParameter('id');
+
+    fetchExamById(examid);
+    fetchStudentsByExamID(examid);
+}
+
+// Fetches students by examID from database (get_studentsbyexamid/<examid>)
+function fetchStudentsByExamID(id) {
+	$.ajax ({
+		url : "get_studentsbyexamid/" + id,
+		dataType :"json",
+		type:"GET",
+
+		success : function(data) {
+			console.log("Got the students by exam ID from database.");
+			printStudentsByExam(data);
+ 		},
+
+		error : function(err) {
+			console.log(err);
+		}
+	});
+}
+
+// Fetches exam by ID from database (get_exambyid/<id>)
+function fetchExamById(id) {
+	$.ajax ({
+		url : "get_exam/" + id,
+		dataType :"json",
+		type:"GET",
+
+		success : function(data) {
+			console.log("Got the exam by id from database.");
+			printExamInfo(data);
+		},
+
+		error : function(err) {
+			console.log(err);				
+		}
+	});
+}
+
+// Fetches all exams from database (get_exams)
 function fetchExams() {
 	$.ajax ({
 		url : "get_exams",
@@ -43,6 +87,20 @@ function fetchQuestionsForEdit() {
 	});
 }
 
+// examinfo.html function for printing students that participate in the exam
+function printStudentsByExam(jsonData) {
+	$('students-container').append(
+		'asd'
+	);
+}
+
+// examinfo.html function for printing exam information
+function printExamInfo(jsonData) {
+	$('exam-container').append(
+		'asd'
+	);
+}
+
 // examcontrol.html function for listing the exams
 function printExams(jsonData) {
 	$('#exams-container').append(
@@ -52,7 +110,7 @@ function printExams(jsonData) {
 	for (var i = 0; i < jsonData.length; i++) {
 		if (jsonData[i].endtime == 'false') {
 			$('#exams').append(
-			  	'<a href="#" class="list-group-item list-group-item-info">'
+			  	'<a href="/examinfo/?id=' + jsonData[i]._id + '" class="list-group-item list-group-item-info">'
 			  	+ '<h4 class="text-center"><b>' + jsonData[i].loginid + "</b></h4>"
 			  	+ '<p class="text-center"> Aloitettu: ' + jsonData[i].starttime + "</p>"
 		  	 	+ '<p class="text-center">Osallistujia: ' + jsonData[i].students
@@ -62,26 +120,14 @@ function printExams(jsonData) {
 		}
 		else {
 		$('#exams').append(
-			  	'<a href="#" class="list-group-item disabled">'
-			  	+ '<p class="text-center">Alkoi: ' + jsonData[i].starttime + "</p>"
-			  	+ '<p class="text-center">Päättyi: ' + jsonData[i].starttime + "</p>"
+			  	'<a href="/examinfo/?id=' + jsonData[i]._id + '" class="list-group-item disabled">'
+			  	+ '<p class="text-center">Ajankohta: ' + jsonData[i].starttime + " - " + jsonData[i].starttime + "</p>"
 		  	 	+ '<p class="text-center">Osallistujia: ' + jsonData[i].students
 		  	 	+ ' - Tekijä: ' + jsonData[i].admin + "</p>"
 			  	+ '</a>'
 			);
 		}
 	}
-/*
-  	+ '<a href="#" class="list-group-item active">'
-    + 'Cras justo odio'
-  	+ '</a>'
-  	+ '<a href="#" class="list-group-item">Dapibus ac facilisis in</a>'
-  	+ '<a href="#" class="list-group-item">Morbi leo risus</a>'
-  	+ '<a href="#" class="list-group-item">Porta ac consectetur ac</a>'
-  	+ '<a href="#" class="list-group-item">Vestibulum at eros</a>'
-*/
-
-	
 }
 
 function printQuestionsForEdit(jsonData) {

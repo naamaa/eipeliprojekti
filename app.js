@@ -137,7 +137,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	//GET for examinfo/<examid>
-	app.get('/examinfo/id=*', isAuthenticated, loginGroup('admin'), function(req,res){
+	app.get('/examinfo/', isAuthenticated, loginGroup('admin'), function(req,res){
 		res.sendFile("examinfo.html",{root: __dirname + '/private'});
 	});
 
@@ -242,13 +242,36 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
-	// Gets all question data from database 
+	// Gets all exam data from database 
 	app.get("/get_exams", function(req, res) {
 		var exams = db.collection('exams');
+		var examid = req.body.examid;
 	
 	  	exams.find().toArray(function (err, items) {
 	  		console.log("Sending all exam data to client (ADMIN), I'll let you know if something goes wrong.");
-	 		res.send(items);		
+	 		res.send(items);
+		});
+	});
+
+	// POST - Gets exam by ID from database
+	app.get("/examinfo/get_exam/:examid", function(req, res) {
+		var exams = db.collection('exams');
+		examid = req.params.examid;
+
+	  	exams.findOne({_id : parseInt(examid)}, function(err, exam) {
+	  		console.log("Sending exam by ID to client");
+	 		res.send(exam);
+		});
+	});
+
+	// POST - Gets students by exam ID from database (for examinfo.html)
+	app.get("/examinfo/get_studentsbyexamid/:examid", function(req, res) {
+		var students = db.collection('students');
+		examid = req.params.examid;
+
+		students.find({examid : parseInt(examid)}).toArray(function (err, items) {
+			console.log("Sending student by exam ID to client");
+			res.send(items);
 		});
 	});
 

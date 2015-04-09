@@ -243,7 +243,15 @@ function deleteQuestion(id) {
 }
 
 function createExam() {
-	console.log("CALLIN CREATEEXAM");
+	$.get('/create_exam', function(data){
+		if (data.succesful == true) {
+			window.alert("Koekerta luotu!");
+			location.reload();
+		}
+		else if (data.succesful == false) {
+			window.alert("Koekerran luonti onnistui");
+		}
+	});
 }
 
 // Events

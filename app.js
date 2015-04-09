@@ -62,7 +62,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
  		function(apikey, done) {
  			console.log(apikey);
  		 	var User = db.collection('exams');
-    		User.findOne({loginid: apikey}, function (err, user) {
+    		User.findOne({loginid: apikey, endtime: 'false'}, function (err, user) {
      			if (err) {
      			 return done(err); 
      			}
@@ -164,18 +164,18 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 	/* POST /loginUser */
 	app.post('/login_user',
-	passport.authenticate('localapikey',{ successRedirect: '/exam', 
+	passport.authenticate('localapikey',{ successRedirect: '/studentsignup', 
 										failureRedirect: '/?retry=true'})
 	); 
 
-/* POST/create_exam  creates unique cutting edge login code for user and inserts it to database. Also administrator name must be given and starttime */
+/* GET/create_exam  creates unique cutting edge login code for user and inserts it to database. Also administrator name must be given and starttime */
 
-	app.post('/create_exam', function(req,res){
+	app.get('/create_exam', function(req,res){
 
 			autoIncrement.getNextSequence(db, "exams", function(err, autoIndex){
 			var exams = db.collection('exams');
 			var id = autoIndex;
-
+			console.log(req.user);
 			//Creates login code and ensures it doesnt do duplicaters
 
 			var create_logincode = function(){
@@ -204,8 +204,8 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 			exams.insert( {
 				_id: id,
 				loginid: loginid,
-				admin: req.body.admin,
-				starttime: req.body.starttime,
+				admin: req.user.user,
+				starttime: new Date(),
 				endtime: "false",
 				students:  ""
 			}, function(err, result) {
@@ -385,7 +385,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		var lastname = req.body.lastname;
 		var ssn = req.body.ssn;
 		var email = req.body.email;
-	
+		var examid = req.user._id;
 
 		autoIncrement.getNextSequence(db, "students", function(err, autoIndex) {
 			var students = db.collection('students');
@@ -396,7 +396,10 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 				firstname: firstname,
 				lastname: lastname,
 				ssn: ssn,
-				email: email
+				email: email,
+				answer_sent: "false",
+				id_check: "false",
+				examid: examid
 			}, function(err, result) {
 				if (err) {
 					console.log(err);
@@ -404,7 +407,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 				}
 				else if (result) {
 					console.log("Student added!");
-					res.json({succesful: true});
+					res.redirect('/exam');
 				}
 				else if (!result) {
 					console.log("Couldn't add student.")

@@ -41,7 +41,7 @@ function printExamQuestions(jsonData) {
 		$("#answers-form").append(
 			'<div id="question' 
 			+ jsonData[i]._id 
-			+ '" class="btn-group btn-group-justified" data-toggle="buttons"></div><hr/>');
+			+ '" data-toggle="buttons"></div><hr/>');
 
 		$("#question" + jsonData[i]._id).append(
 			'<label class="btn btn-success"><input name="' 

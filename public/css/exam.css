@@ -3,17 +3,12 @@
 	/* streches question buttons to parent width */
 	width: 100%;
 }
-
-.btn-group-justified
-{
-	padding: 0px 30px 15px;
-}	
-
+	
 .btn
 {
 	/* splits text in buttons to multiple lines when text doesnt't fit to one line */
 	white-space: normal;
-	opacity: 0.9;
+	opacity: 0.8;
 }
 
 #main-container
@@ -52,6 +47,13 @@
   	background-color: #E1E1E1;
 }
 
+.btn.btn-success {
+	width: 50%;
+}
+
+.btn.btn-danger {
+	width: 50%;
+}
 
 
 

@@ -34,9 +34,9 @@ function printExamQuestions(jsonData) {
 		$('#answers-form').append(
 			'<label for="question' 
 			+ questionCounter 
-			+ '" class="control-label input-group">' 
+			+ '" class="control-label input-group"><b>' 
 			+ questionCounter + '. ' 
-			+ jsonData[i].question + '</label>');
+			+ jsonData[i].question + '</b></label>');
 
 		$("#answers-form").append(
 			'<div id="question' 

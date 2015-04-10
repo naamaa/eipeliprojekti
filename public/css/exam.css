@@ -8,12 +8,13 @@
 {
 	/* splits text in buttons to multiple lines when text doesnt't fit to one line */
 	white-space: normal;
+	opacity: 0.8;
 }
 
 #main-container
 {
 	margin-top: 15px;
-	margin-bottom: 50px;
+	margin-bottom: 50;
 	max-width: 850px;
 }
 
@@ -35,8 +36,8 @@
 
 .footer {
   	position: fixed;
-  	bottom: 0;
+	bottom: 0;
   	width: 100%;
   	height: 70px;
-  	background-color: #f5f5f5;
+  	background-color: #E1E1E1;
 }

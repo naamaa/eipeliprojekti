@@ -11,6 +11,10 @@
 	opacity: 0.8;
 }
 
+.btn.active, .btn:active {
+    background-color: #323d4d;
+}
+
 #main-container
 {
 	margin-top: 15px;

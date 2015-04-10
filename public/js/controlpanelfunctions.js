@@ -263,7 +263,10 @@ function addQuestion() {
 	var newanswer = answerSelect.textContent;
 
 	$.post('/add_question', {question: newquestion, answer: newanswer}, function(data) {
-		if (data.succesful == true) {
+		if (newquestion == "") {
+			window.alert("Et voi lisätä tyhjää kysymystä. Lisää kysymyksen tiedot.");
+		}
+		else if (data.succesful == true) {
 			window.alert("Kysymys lisätty.");
 			location.reload();
 		}

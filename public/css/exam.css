@@ -4,11 +4,16 @@
 	width: 100%;
 }
 
+.btn-group-justified
+{
+	padding: 0px 30px 15px;
+}	
+
 .btn
 {
 	/* splits text in buttons to multiple lines when text doesnt't fit to one line */
 	white-space: normal;
-	opacity: 0.8;
+	opacity: 0.9;
 }
 
 #main-container
@@ -16,6 +21,11 @@
 	margin-top: 15px;
 	margin-bottom: 50;
 	max-width: 850px;
+}
+
+#label
+{	
+	padding: 15px 0px 0px;
 }
 
 #questions-container
@@ -41,3 +51,7 @@
   	height: 70px;
   	background-color: #E1E1E1;
 }
+
+
+
+

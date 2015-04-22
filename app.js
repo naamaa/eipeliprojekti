@@ -243,22 +243,21 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
-
-	function shuffle(shuffle_me) {
+	// Shuffle() shuffles the order of questions. 
 		var array = shuffle_me;
 
 		var currentIndex = array.length;
 		var tempValue;
 		var randomIndex;
 
-	while (0 !== currentIndex) {
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex -= 1;
+		while (0 !== currentIndex) {
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex -= 1;
 
-		tempValue = array[currentIndex];
-		array[currentIndex] = array[randomIndex];
-		array[randomIndex] = tempValue;
-	}
+			tempValue = array[currentIndex];
+			array[currentIndex] = array[randomIndex];
+			array[randomIndex] = tempValue;
+		}
  		return array;
 	}
 

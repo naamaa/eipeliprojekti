@@ -172,29 +172,30 @@ function printExamInfo(jsonData) {
 // examcontrol.html function for listing the exams
 function printExams(jsonData) {
 
-	$('#exams-container').append(
-		'<h4 class="center-x center-y">Aktiiviset kokeet</h4>'
-	    + '<table id="examtable" class="table table-bordered">'
-      	+ '<tbody id="examtbody">'
-      	+ '<th class="time">Aloitusaika</th>'
-      	+ '<th>Koodi</th>'
-      	+ '<th>Osallistujia</th>'
-      	+ '<th>Tekijä</th>'
-      	+ '<th class="redirect"></th>'
-      	+ '</tbody></table>'
-	);
+	if (jsonData.length != 0) {
+		$('#exams-container').append(
+			'<h4 class="center-x center-y">Aktiiviset kokeet</h4>'
+		    + '<table id="examtable" class="table table-bordered">'
+	      	+ '<tbody id="examtbody">'
+	      	+ '<th class="time">Aloitusaika</th>'
+	      	+ '<th class="time">Koodi</th>'
+	      	+ '<th>Tekijä</th>'
+	      	+ '<th class="redirect"></th>'
+	      	+ '</tbody></table>'
+		);
 
-	$('#exams-container').append(
-		'<h4 class="center-x center-y">Vanhat kokeet</h4>'
-	    + '<table id="pastexamtable" class="table table-bordered">'
-      	+ '<tbody id="pastexamtbody">'
-      	+ '<th class="time">Aloitusaika</th>'
-      	+ '<th class="time">Lopetusaika</th>'
-      	+ '<th>Osallistujia</th>'
-      	+ '<th>Tekijä</th>'
-      	+ '<th class="redirect"></th>'
-      	+ '</tbody></table>'
-	);
+		$('#exams-container').append(
+			'<h4 class="center-x center-y">Vanhat kokeet</h4>'
+		    + '<table id="pastexamtable" class="table table-bordered">'
+	      	+ '<tbody id="pastexamtbody">'
+	      	+ '<th class="time">Aloitusaika</th>'
+	      	+ '<th class="time">Lopetusaika</th>'
+	      	+ '<th>Osallistujia</th>'
+	      	+ '<th>Tekijä</th>'
+	      	+ '<th class="redirect"></th>'
+	      	+ '</tbody></table>'
+		);
+	}
 
 	for (var i = 0; i < jsonData.length; i++) {
 		var startdate = new Date(jsonData[i].starttime);
@@ -210,9 +211,6 @@ function printExams(jsonData) {
 	    		+ '<td>'
 				+ '<b>' +  jsonData[i].loginid + '</b>'
 	    		+ '</td>'
-				+ '<td>'
-				+ jsonData[i].students
-				+ '</td>'
 				+ '<td>'
 				+ jsonData[i].admin
 				+ '</td>'
@@ -423,8 +421,11 @@ function createExam() {
 function endExam() {
 	$.get('/stopexam/' + getUrlParameter('id'), function(data){
 		alert("Koe lopetettu.");
-		location.reload();
 	});
+	$.get('/set_participantcount/' + getUrlParameter('id'), function(data){
+		console.log("Participants updated.")
+	});
+	location.reload();
 }
 
 // Events

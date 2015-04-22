@@ -126,9 +126,9 @@ function printStudentsByExam(jsonData) {
 			$('#result_cell' + jsonData[i]._id).append('<b>' + jsonData[i].result + '/80</b>');
 		}
  	}
-
 }
 
+// Accepts the sent answers for a student in examinfo
 function acceptAnswer(studentID) {
 	console.log(studentID);
 	$.get('/acceptanswer/' + studentID, function(data){
@@ -173,29 +173,75 @@ function printExamInfo(jsonData) {
 function printExams(jsonData) {
 
 	$('#exams-container').append(
-	'<div id="exams" class="list-group">'
-	+ '</div>');
+		'<h4 class="center-x center-y">Aktiiviset kokeet</h4>'
+	    + '<table id="examtable" class="table table-bordered">'
+      	+ '<tbody id="examtbody">'
+      	+ '<th class="time">Aloitusaika</th>'
+      	+ '<th>Koodi</th>'
+      	+ '<th>Osallistujia</th>'
+      	+ '<th>Tekijä</th>'
+      	+ '<th class="redirect"></th>'
+      	+ '</tbody></table>'
+	);
+
+	$('#exams-container').append(
+		'<h4 class="center-x center-y">Vanhat kokeet</h4>'
+	    + '<table id="pastexamtable" class="table table-bordered">'
+      	+ '<tbody id="pastexamtbody">'
+      	+ '<th class="time">Aloitusaika</th>'
+      	+ '<th class="time">Lopetusaika</th>'
+      	+ '<th>Osallistujia</th>'
+      	+ '<th>Tekijä</th>'
+      	+ '<th class="redirect"></th>'
+      	+ '</tbody></table>'
+	);
 
 	for (var i = 0; i < jsonData.length; i++) {
 		var startdate = new Date(jsonData[i].starttime);
 		var enddate = new Date(jsonData[i].endtime);
+		var redirectURL = "'/examinfo/?id=" + jsonData[i]._id + "'";
+
 		if (jsonData[i].endtime == 'false') {
-			$('#exams').append(
-			  	'<a href="/examinfo/?id=' + jsonData[i]._id + '" class="list-group-item list-group-item-info">'
-			  	+ '<h4 class="text-center"><b>' + jsonData[i].loginid + "</b></h4>"
-			  	+ '<p class="text-center"> Aloitettu: ' + startdate.toLocaleString() +"</p>"
-		  	 	+ '<p class="text-center">Osallistujia: ' + jsonData[i].students
-		  	 	+ ' - Tekijä: ' + jsonData[i].admin + "</p>"
-			  	+ '</a>'
+			$('#examtbody').append(
+				'<tr>'
+				+ '<td>'
+				+ startdate.toLocaleString()
+	    		+ '</td>'
+	    		+ '<td>'
+				+ '<b>' +  jsonData[i].loginid + '</b>'
+	    		+ '</td>'
+				+ '<td>'
+				+ jsonData[i].students
+				+ '</td>'
+				+ '<td>'
+				+ jsonData[i].admin
+				+ '</td>'
+				+ '<td>'
+				+ '<button class="btn btn-xs btn-block btn-primary" onClick="location.href=' + redirectURL + ';">Koesivulle</button>'
+				+ '</td>'
+				+ '</tr>'
 			);
 		}
+
 		else {
-		$('#exams').append(
-			  	'<a href="/examinfo/?id=' + jsonData[i]._id + '" class="list-group-item disabled">'
-			  	+ '<p class="text-center">Ajankohta: ' + startdate.toLocaleString() + " - " + enddate.toLocaleString() + "</p>"
-		  	 	+ '<p class="text-center">Osallistujia: ' + jsonData[i].students
-		  	 	+ ' - Tekijä: ' + jsonData[i].admin + "</p>"
-			  	+ '</a>'
+			$('#pastexamtbody').append(
+				'<tr>'
+				+ '<td>'
+				+ startdate.toLocaleString()
+	    		+ '</td>'
+	    		+ '<td>'
+				+ enddate.toLocaleString()
+	    		+ '</td>'
+				+ '<td>'
+				+ jsonData[i].students
+				+ '</td>'
+				+ '<td>'
+				+ jsonData[i].admin
+				+ '</td>'
+				+ '<td>'
+				+ '<button class="btn btn-xs btn-block btn-primary" onClick="location.href=' + redirectURL + ';">Koesivulle</button>'
+				+ '</td>'
+				+ '</tr>'
 			);
 		}
 	}
@@ -343,11 +389,11 @@ function editQuestion(id) {
 }
 
 // Confirm delete question
- function confirmDelete(id) {
+function confirmDelete(id) {
 	var r = confirm("Haluatko varmasti poistaa kysymyksen: " + id);
 	if (r == true)
 		deleteQuestion(id);
- }
+}
 
 // Delete question from the database
 function deleteQuestion(id) {
@@ -405,6 +451,4 @@ $(document).ready(function() {
 	    	$(this).css("background-color", "#e6e6e6");
 	    }
   	});	
-
 });
-

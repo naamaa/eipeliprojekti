@@ -243,7 +243,8 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
-	// Shuffle() shuffles the order of questions. 
+	// Shuffle() shuffles the order of questions.
+	function shuffle(shuffle_me) {
 		var array = shuffle_me;
 
 		var currentIndex = array.length;
@@ -266,7 +267,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		var exams = db.collection('exams');
 		var examid = req.body.examid;
 	
-	  	exams.find().toArray(function (err, items) {
+	  	exams.find().sort({ starttime: -1 }).toArray(function (err, items) {
 	  		console.log("Sending all exam data to client (ADMIN), I'll let you know if something goes wrong.");
 	 		res.send(items);
 		});

@@ -275,6 +275,30 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		});
 	});
 
+	app.get("/acceptanswer/:studentid", isAuthenticated, loginGroup('admin'), function(req, res) {
+		var students = db.collection('students');
+		studentid = req.params.studentid;
+		console.log("Attempting to check ID for student ID: " + studentid)
+	  	students.update({_id : parseInt(studentid)},  { 
+	  		$set: {
+				id_check: "true"
+			}
+		}, function(err, result) {
+			if (err) {
+				console.log(err);
+				res.json({succesful: false});
+			}
+			else if (result) {
+				console.log("Student id_check changed to 'true'.");
+				res.json({succesful: true});
+			}
+			else if (!result) {
+				console.log("Couldn't find a student with that id.")
+				res.json({succesful: false});
+			}
+		});
+	});
+
 	app.get("/stopexam/:examid", isAuthenticated, loginGroup('admin'), function(req, res) {
 			var exams = db.collection('exams');
 			examid = req.params.examid;

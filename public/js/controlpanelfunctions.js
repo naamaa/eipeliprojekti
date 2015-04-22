@@ -107,11 +107,34 @@ function printStudentsByExam(jsonData) {
 			+ '<td>'
 			+ signupDate.toLocaleString()
 			+ '</td>'
-			+ '<td>'
-			+ (jsonData[i].id_check == 'false' ? '<span class="label label-warning">Odottaa hyväksyntää</span>' : '<span class="label label-success">Tulos tähän</span>')
+			+ '<td id="status_cell' + jsonData[i]._id + '">'
 			+ '</td>'
-			+ '</tr>');
- 	} 
+			+ '</td>'
+			+ '<td id="result_cell' + jsonData[i]._id + '">'
+			+ '</td>'
+			+ '</tr>'
+		);
+
+		// Status cell labels and result cell
+		if (jsonData[i].answer_sent == 'false') {
+			$('#status_cell' + jsonData[i]._id).append('<span class="label label-warning center-block">Koe kesken</span>');
+		} else if (jsonData[i].answer_sent == 'true' && jsonData[i].id_check == 'false') {
+			$('#status_cell' + jsonData[i]._id).append('<span class="label label-info center-block">Odottaa hyväksyntää</span>');
+			$('#result_cell' + jsonData[i]._id).append('<button class="btn btn-xs btn-primary btn-block" onClick="acceptAnswer(' + jsonData[i]._id + ')">Hyväksy vastaukset</button>');
+		} else {
+			$('#status_cell' + jsonData[i]._id).append('<span class="label label-success center-block">Koe palautettu</span>');
+			$('#result_cell' + jsonData[i]._id).append('<b>' + jsonData[i].result + '/80</b>');
+		}
+ 	}
+
+}
+
+function acceptAnswer(studentID) {
+	console.log(studentID);
+	$.get('/acceptanswer/' + studentID, function(data){
+		alert("Vastaukset hyväksytty.");
+		location.reload();
+	});
 }
 
 // examinfo.html function for printing exam information
@@ -346,14 +369,14 @@ function createExam() {
 			location.reload();
 		}
 		else if (data.succesful == false) {
-			window.alert("Koekerran luonti onnistui");
+			window.alert("Koekerran luonti onnistui.");
 		}
 	});
 }
 
 function endExam() {
 	$.get('/stopexam/' + getUrlParameter('id'), function(data){
-		alert("Koe poistettu");
+		alert("Koe lopetettu.");
 		location.reload();
 	});
 }

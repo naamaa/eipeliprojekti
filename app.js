@@ -264,14 +264,51 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
  		return array;
 	}
 
+	app.get("/set_participantcount/:examid", isAuthenticated, loginGroup('admin'), function(req, res) {
+		var students = db.collection('students');
+		examid = req.params.examid;
+		students.find({examid : parseInt(examid)}).toArray(function (err, items) {
+			if (err) {
+				console.log(err);
+			} else {
+				updateParticipants(examid, items.length);
+				console.log("Participants updated.");
+			}
+		});
+	});
+
+	function updateParticipants(examid, count) {
+		var exams = db.collection('exams');
+	  	exams.update({_id : parseInt(examid)},  { $set:
+	  	{
+			students: count
+		}
+		}, function(err, result) {
+			if (err) {
+				console.log(err);
+			}
+			else if (result) {
+				console.log("Updated participants.");
+			}
+			else if (!result) {
+				console.log("Couldn't find a exam with that id.")
+			}
+		});
+	}
+
 	// Gets all exam data from database 
 	app.get("/get_exams", isAuthenticated, loginGroup('admin'), function(req, res) {
 		var exams = db.collection('exams');
 		var examid = req.body.examid;
 	
 	  	exams.find().sort({ starttime: -1 }).toArray(function (err, items) {
-	  		console.log("Sending all exam data to client (ADMIN), I'll let you know if something goes wrong.");
-	 		res.send(items);
+	  		if (err) {
+	  			console.log(err);
+	  		}
+	  		else {
+	  			console.log("Sending all exam data to client (ADMIN), I'll let you know if something goes wrong.");
+	 			res.send(items);
+	 		}
 		});
 	});
 
@@ -281,8 +318,14 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		examid = req.params.examid;
 
 	  	exams.findOne({_id : parseInt(examid)}, function(err, exam) {
-	  		console.log("Sending exam by ID to client");
-	 		res.send(exam);
+	  		if (err) {
+	  			console.log(err);
+	  		}
+	  		else {
+		  		console.log("Sending exam by ID to client");
+ 				res.send(exam);
+	  		}
+
 		});
 	});
 
@@ -292,8 +335,13 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		examid = req.params.examid;
 
 		students.find({examid : parseInt(examid)}).toArray(function (err, items) {
-			console.log("Sending student by exam ID to client");
-			res.send(items);
+	  		if (err) {
+	  			console.log(err);
+	  		}
+	  		else {
+				console.log("Sending students by exam ID to client");
+				res.send(items);
+			}
 		});
 	});
 
@@ -323,10 +371,10 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 	app.get("/stopexam/:examid", isAuthenticated, loginGroup('admin'), function(req, res) {
 			var exams = db.collection('exams');
-			examid = req.params.examid;
+			var examid = req.params.examid;
 		  	exams.update({_id : parseInt(examid)},  { $set:
 		  	{
-			endtime: new Date()
+			endtime: new Date(),
 			}
 		}, function(err, result) {
 			if (err) {

@@ -5,11 +5,12 @@
 
 #exam-container {
 	width: 100%;
-	padding: 5px;
 }
 
 #students-container {
-
+	padding-left: 0px;
+	padding-right: 0px;
+	margin-top: 5px;
 }
 
 #endExamBtn {

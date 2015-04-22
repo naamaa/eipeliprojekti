@@ -244,6 +244,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	// Shuffle() shuffles the order of questions. 
+	function shuffle(shuffle_me) {
 		var array = shuffle_me;
 
 		var currentIndex = array.length;

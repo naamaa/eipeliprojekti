@@ -34,7 +34,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	app.use(passport.session());
 
 	/*Passport strategy for Admin */ 
-	passport.use(new LocalStrategy(
+	passport.use('admin-local', new LocalStrategy(
   		function(username, password, done) {
   			console.log("/login REQUEST : admin login data:", username, password);
 			var salt = "0serj9fuhaa09suejdrawserf90hnj23490";
@@ -59,10 +59,10 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 	//Passport strategy for logincodes
 	passport.use(new LocalAPIKeyStrategy(
- 		function(apikey, done) {
- 			console.log(apikey);
+ 		function(ssn, done) {
+ 			console.log(ssn);
  		 	var User = db.collection('exams');
-    		User.findOne({loginid: apikey, endtime: 'false'}, function (err, user) {
+    		User.findOne({loginid: ssn, endtime: 'false'}, function (err, user) {
      			if (err) {
      			 return done(err); 
      			}
@@ -127,7 +127,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 
 	//GET for exam
-	app.get('/exam', isAuthenticated, loginGroup('user'), function(req,res){
+	app.get('/exam', isAuthenticated, loginGroup('student'), function(req,res){
 		res.sendFile("exam.html",{root: __dirname + '/private'});
 	});
 
@@ -158,7 +158,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 
 	/* POST /login */
 	app.post('/login',
-  	passport.authenticate('local', { successRedirect: '/controlpanel',
+  	passport.authenticate('admin-local', { successRedirect: '/controlpanel',
                                    failureRedirect: '/?retryadmin=true'})
 	);
 
@@ -167,6 +167,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	passport.authenticate('localapikey',{ successRedirect: '/studentsignup', 
 										failureRedirect: '/?retry=true'})
 	); 
+
 
 /* GET/create_exam  creates unique cutting edge login code for user and inserts it to database. Also administrator name must be given and starttime */
 
@@ -226,7 +227,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	});
 	
 	// Gets questions and id's from database (answer is not sent to client)
-	app.get("/get_questions",isAuthenticated, loginGroup('user'), function(req, res) {
+	app.get("/get_questions",isAuthenticated, loginGroup('student'), function(req, res) {
 		var questions = db.collection('questions');
 
 	  	questions.find().toArray(function (err, items) {
@@ -355,7 +356,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 	/* POST /check_answers */
 	/* Compares keys ( user submitted values ) against database values */
 	/* Is it necessary to query the whole database? Probably not, but it's working! -JH*/
-	app.post('/check_answers', isAuthenticated, loginGroup('user'), function(req, res) {
+	app.post('/check_answers', isAuthenticated, loginGroup('student'), function(req, res) {
 		var scores = 0;
 		var i = 0;
 		var questions = db.collection('questions');
@@ -374,8 +375,31 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 				}
 			}
 			console.log("HOORAY, total points: " + scores);
-		});	
 
+		//ADD ANSWERS TO DATABASE
+		var students = db.collection('students');
+	  	students.update({_id : parseInt(req.user._id)},  { 
+	  		$set: {
+				result: scores
+			}
+		}, function(err, result) {
+			if (err) {
+				console.log(err);
+				res.json({succesful: false});
+			}
+			else if (result) {
+				console.log("Added this result to the student!" + scores);
+				req.logout();
+				res.redirect('/');
+			}
+			else if (!result) {
+				console.log("Couldn't find a student with that id.")
+				res.json({succesful: false});
+			}
+		});
+		//END OF ADD ANSWERS TO DATABASE
+
+		});	
 	});
 
 	/* POST /delete_question */
@@ -477,11 +501,11 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		var ssn = req.body.ssn;
 		var email = req.body.email;
 		var examid = req.user._id;
-
+		var loginGroup = "student";
 		autoIncrement.getNextSequence(db, "students", function(err, autoIndex) {
 			var students = db.collection('students');
 			console.log('Adding student with autoIndex ID : ' + autoIndex);
-			students.insert( {
+			var student = ({
 				_id: autoIndex,
 				signupDate: new Date(),
 				firstname: firstname,
@@ -491,15 +515,24 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 				answer_sent: "false",
 				id_check: "false",
 				examid: examid,
-				result: ""
-			}, function(err, result) {
+				result: 0,
+				group: loginGroup
+			});
+
+			students.insert( student , function(err, result) {
 				if (err) {
 					console.log(err);
 					res.json({succesful: false});
 				}
 				else if (result) {
 					console.log("Student added!");
-					res.redirect('/exam');
+					req.logout();
+					req.login(student,function (err){
+						if(err) {
+							return next(err);
+						}
+						res.redirect('/exam');
+					});
 				}
 				else if (!result) {
 					console.log("Couldn't add student.")

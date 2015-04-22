@@ -380,6 +380,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function (err, d
 		var students = db.collection('students');
 	  	students.update({_id : parseInt(req.user._id)},  { 
 	  		$set: {
+	  			answer_sent: "true",
 				result: scores
 			}
 		}, function(err, result) {

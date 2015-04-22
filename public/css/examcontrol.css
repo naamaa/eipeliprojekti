@@ -1,13 +1,31 @@
 #main-container {
 	margin-top: 15px;
-	max-width: 450px;
+	max-width: 700px;
 }
 
 #exams-container {
 	width: 100%;
-	padding: 5px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 15px;
 }
 
 #exams {
 	width: 100%;
+}
+
+th, td {
+	text-align: center;
+}
+
+th.time {
+	width: 175px;
+}
+
+th.redirect {
+	width: 100px;
+}
+
+#examtable {
+	background-color: #f9f9f9;
 }

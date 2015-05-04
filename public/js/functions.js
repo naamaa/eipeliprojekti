@@ -12,8 +12,6 @@ function fetchExamQuestions() {
 		type:"GET",
 
 		success : function(data) {
-			console.log("Got the questions from database.");
-			console.log(data);
 			printExamQuestions(data);
 		},
 
@@ -29,8 +27,6 @@ function printExamQuestions(jsonData) {
 	document.getElementById("counter").innerHTML = counterString;
 	var questionCounter = 1;
 	for (var i = 0; i < jsonData.length; i++) {
-		var answerCounter = 0;
-
 		$('#answers-form').append(
 			'<div id="question_wrapper' + questionCounter + '"'
 			+ '<div id="label"><label for="question' 
@@ -42,7 +38,7 @@ function printExamQuestions(jsonData) {
 		$("#question_wrapper" + questionCounter).append(
 			'<div id="question' 
 			+ jsonData[i]._id 
-			+ '" data-toggle="buttons"></div><hr/>');
+			+ '" class="question_answer" data-toggle="buttons"></div><hr/>');
 
 		$("#question" + jsonData[i]._id).append(
 			'<label class="btn btn-success"><input name="' 
@@ -106,9 +102,22 @@ function startTimer() {
 }
 
 // submit form function called from the submit button
-function submitform()
-{
-  document.answerform.submit();
+function submitform() {
+	// in the finnish rally language we call this "purkka"
+	var questionsInForm = 0;
+	var answeredQuestions = 0;
+	$('.question_answer').each(function() {
+		questionsInForm++;
+	});
+
+	$("label").each(function() {
+		if ($(this).hasClass('active')) {
+			answeredQuestions++;
+		}
+	});
+
+	if (questionsInForm == answeredQuestions) document.answerform.submit();
+  	else alert("Vastaa kaikkiin kysymyksiin.")
 }
 
 // Toggle visibility of admin login elements

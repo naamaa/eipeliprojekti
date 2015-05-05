@@ -59,11 +59,10 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
         });
     }));
     //Passport strategy for logincodes
-    passport.use(new LocalAPIKeyStrategy(function(ssn, done) {
-        console.log(ssn);
+    passport.use(new LocalAPIKeyStrategy(function(code, done) {
         var User = db.collection('exams');
         User.findOne({
-            loginid: ssn,
+            loginid: code,
             endtime: 'false'
         }, function(err, user) {
             if (err) {
@@ -140,6 +139,10 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
             root: __dirname + '/private'
         });
     });
+	//GET for studentresult
+	app.get('/studentresult/', isAuthenticated, loginGroup('admin'), function(req,res){
+		res.sendFile("studentresult.html",{root: __dirname + '/private'});
+	});
     //GET for results
     app.get('/results', isAuthenticated, loginGroup('admin'), function(req, res) {
         res.sendFile("results.html", {
@@ -175,11 +178,9 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
             var exams = db.collection('exams');
             var id = autoIndex;
             console.log(req.user);
-            //Creates login code and ensures it doesnt do duplicaters
+            // Creates login code and ensures it doesnt do duplicates
 
             getQuestions(function(shuffled_questions) {
-                console.log("shuffled_questions:", shuffled_questions);
-
                 var create_logincode = function() {
                     var logincode = Math.floor(Math.random() * 9000) + 1000;
                     var found = false;
@@ -201,7 +202,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
                 };
 
                 var loginid = create_logincode().toString();
-                console.log("LoginID:" + loginid);
+                console.log("LoginID: " + loginid);
                 console.log("Adding exam with ID : " + autoIndex);
                 exams.insert({
                     _id: id,
@@ -218,7 +219,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
                             succesful: false
                         });
                     } else if (result) {
-                        console.log("Added!");
+                        console.log("Exam added!");
                         res.json({
                             succesful: true
                         });
@@ -236,8 +237,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
     // Gets questions and id's from database (answer is not sent to client)
     app.get("/get_questions", isAuthenticated, loginGroup('student'), function(req, res) {
         var questions = db.collection('questions');
-        questions.find().toArray(function(err, items) {
-            console.log("Sending questions and id's to client, I'll let you know if something goes wrong.");
+        questions.find().toArray(function(err, items) {;
             // I don't think we should send the answer to the client here -Ville
             var response = [];
             for (var i = 0; i < items.length; i++) {
@@ -293,6 +293,22 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
         }
         return final_array;
     }
+    	app.get("/get_students", isAuthenticated, loginGroup('admin'), function(req, res) {
+		var students = db.collection('students');
+
+	  	students.find().sort({lastname : -1, firstname : -1}).toArray(function (err, items) {
+	  		if (err) {
+	  			console.log(err);
+	  		}
+	  		else if (items) {
+	  			console.log("Students sent to client.");
+	  			res.send(items);
+	  		}
+	  		else {
+				console.log("Couldn't get students from database");	
+	  		}				
+		});
+	});
     app.get("/set_participantcount/:examid", isAuthenticated, loginGroup('admin'), function(req, res) {
         var students = db.collection('students');
         examid = req.params.examid;
@@ -307,7 +323,6 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
             }
         });
     });
-
     function updateParticipants(examid, count) {
         var exams = db.collection('exams');
         exams.update({
@@ -336,7 +351,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
             if (err) {
                 console.log(err);
             } else {
-                console.log("Sending all exam data to client (ADMIN), I'll let you know if something goes wrong.");
+                console.log("Exam data sent to client.");
                 res.send(items);
             }
         });
@@ -351,22 +366,37 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
             if (err) {
                 console.log(err);
             } else {
-                console.log("Sending exam by ID to client");
+                console.log("Sending exam (by ID) to client");
                 res.send(exam);
             }
         });
     });
-    // GET - Gets students by exam ID from database (for examinfo.html)
-    app.get("/examinfo/get_studentsbyexamid/:examid", isAuthenticated, loginGroup('admin'), function(req, res) {
+    // GET - Gets student by ID from database
+    app.get("/studentresult/get_student/:studentid", isAuthenticated, loginGroup('admin'), function(req, res) {
         var students = db.collection('students');
-        examid = req.params.examid;
-        students.find({
-            examid: parseInt(examid)
-        }).toArray(function(err, items) {
+        studentid = req.params.studentid;
+        students.findOne({
+            _id: parseInt(studentid)
+        }, function(err, student) {
             if (err) {
                 console.log(err);
             } else {
-                console.log("Sending students by exam ID to client");
+                console.log("Sending student (by ID) to client");
+                res.send(student);
+            }
+        });
+    });
+    // GET - Gets students by exam ID from database
+    app.get("/examinfo/get_studentsbyexamid/:examid", isAuthenticated, loginGroup('admin'), function(req, res) {
+        var students = db.collection('students');
+        examid = req.params.examid;
+        students.find({examid: parseInt(examid)})
+        .sort({lastname : -1, firstname : -1})
+        .toArray(function(err, items) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("Sending students (by exam ID) to client");
                 res.send(items);
             }
         });
@@ -374,7 +404,6 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
     app.get("/acceptanswer/:studentid", isAuthenticated, loginGroup('admin'), function(req, res) {
         var students = db.collection('students');
         studentid = req.params.studentid;
-        console.log("Attempting to check ID for student ID: " + studentid)
         students.update({
             _id: parseInt(studentid)
         }, {
@@ -432,56 +461,67 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
     app.get("/get_questions_all", isAuthenticated, loginGroup('admin'), function(req, res) {
         var questions = db.collection('questions');
         questions.find().toArray(function(err, items) {
-            console.log("Sending all question data to client (ADMIN), I'll let you know if something goes wrong.");
+            console.log("Question data sent to client.");
             res.send(items);
         });
     });
     /* POST /check_answers */
     /* Compares keys ( user submitted values ) against database values */
-    /* Is it necessary to query the whole database? Probably not, but it's working! -JH*/
     app.post('/check_answers', isAuthenticated, loginGroup('student'), function(req, res) {
         var scores = 0;
         var i = 0;
         var questions = db.collection('questions');
         questions.find().toArray(function(err, questions) {
+        	var studentAnswers = []; // used in saving the questions and answers to student
             for (var key in req.body) {
                 if (key != 'button') {
                     var userValue = req.body[key];
                     var databaseValue = questions[i].answer;
+                    var correct = "";
+					if (userValue != "true" && userValue != "false") {
+						userValue = "empty";
+					}
+					if (userValue === databaseValue) {
+						scores++;
+						correct = "true";
+					} else {
+						correct = "false";
+					}
+					studentAnswers.push({ 
+        				"question" : questions[i].question,
+        				"userAnswer" : userValue,
+        				"correct"  : correct
+    				});
                     i++;
-                    if (userValue === databaseValue) {
-                        scores++;
-                    }
                 }
             }
-            console.log("HOORAY, total points: " + scores);
-            //ADD ANSWERS TO DATABASE
+            console.log("Exam completed, points: " + scores);
+            // Adding scores to database
             var students = db.collection('students');
             students.update({
                 _id: parseInt(req.user._id)
             }, {
                 $set: {
+                	endDate: new Date(),
                     answer_sent: "true",
-                    result: scores
+                    result: scores,
+                    student_answers: studentAnswers
                 }
             }, function(err, result) {
                 if (err) {
-                    console.log(err);
-                    res.json({
-                        succesful: false
-                    });
-                } else if (result) {
-                    console.log("Added this result to the student!" + scores);
-                    req.logout();
-                    res.redirect('/');
-                } else if (!result) {
-                    console.log("Couldn't find a student with that id.")
-                    res.json({
-                        succesful: false
-                    });
-                }
+					console.log(err);
+					res.json({succesful: false});
+				}
+				else if (result) {
+					console.log("Added scores and student answer data to student document!");
+					req.logout();
+					res.redirect('/');
+				}
+				else if (!result) {
+					console.log("Couldn't find a student with that id.");
+					res.json({succesful: false});
+				}
             });
-            //END OF ADD ANSWERS TO DATABASE
         });
     });
     /* POST /delete_question */
@@ -508,7 +548,6 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
                 });
             }
         });
-        console.log("Got this id:" + id);
     });
     // POST /edit_question
     app.post('/edit_question', isAuthenticated, loginGroup('admin'), function(req, res) {
@@ -586,7 +625,6 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
         // student's personal data
         var firstname = req.body.firstname;
         var lastname = req.body.lastname;
-        var ssn = req.body.ssn;
         var email = req.body.email;
         var examid = req.user._id;
         var loginGroup = "student";
@@ -598,12 +636,11 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
                 signupDate: new Date(),
                 firstname: firstname,
                 lastname: lastname,
-                ssn: ssn,
                 email: email,
                 answer_sent: "false",
                 id_check: "false",
                 examid: examid,
-                result: 0,
+                result: "",
                 group: loginGroup
             });
             students.insert(student, function(err, result) {

@@ -1,5 +1,7 @@
 /* This file is for functions in controlpanel */ 
 
+/* INIT FUNCTIONS */
+
 function initEditQuestions() {
 	fetchQuestionsForEdit();
 }
@@ -10,12 +12,27 @@ function initExamControl() {
 
 function initExamInfo() {
     var examid = getUrlParameter('id');
-
     fetchExamById(examid);
     fetchStudentsByExamID(examid);
 }
 
-// Fetches students by examID from database (get_studentsbyexamid/<examid>)
+function initResults() {
+	fetchStudents();
+}
+
+function initStudentResult() {
+    var studentid = getUrlParameter('id');
+    fetchStudentById(studentid);
+    var examid = getUrlParameter('examid');
+    if (parseInt(examid)) {
+    	$("#backbtn").attr("onclick","window.location='/examinfo/?id=" + examid + "';");
+    		
+    }
+}
+
+/* FETCH-FUNTIONS */
+/* These create GET-requests for various data to the server */ 
+
 function fetchStudentsByExamID(id) {
 	$.ajax ({
 		url : "get_studentsbyexamid/" + id,
@@ -33,7 +50,40 @@ function fetchStudentsByExamID(id) {
 	});
 }
 
-// Fetches exam by ID from database (get_exambyid/<id>)
+function fetchStudents() {
+	$.ajax ({
+		url : "get_students",
+		dataType : "json",
+		type: "GET",
+
+		success : function(data) {
+			console.log("Got the students from database.");
+			printStudents(data);
+		},
+
+		error : function(err) {
+			console.log(err);				
+		}
+	});
+}
+
+function fetchStudentById(id) {
+	$.ajax ({
+		url : "get_student/" + id,
+		dataType : "json",
+		type: "GET",
+
+		success : function(data) {
+			console.log("Got the student from database.");
+			printStudentInfo(data);
+		},
+
+		error : function(err) {
+			console.log(err);				
+		}
+	});
+}
+
 function fetchExamById(id) {
 	$.ajax ({
 		url : "get_exam/" + id,
@@ -51,7 +101,6 @@ function fetchExamById(id) {
 	});
 }
 
-// Fetches all exams from database (get_exams)
 function fetchExams() {
 	$.ajax ({
 		url : "get_exams",
@@ -69,7 +118,6 @@ function fetchExams() {
 	});
 }
 
-// Sends request for getting the questions from database
 function fetchQuestionsForEdit() {
 	$.ajax ({
 		url : "get_questions_all",
@@ -87,7 +135,98 @@ function fetchQuestionsForEdit() {
 	});
 }
 
-// examinfo.html function for printing students that participate in the exam
+/* PRINT-FUNCTIONS */
+/* These print the fetched data for the user to examine */
+
+// Prints student data for results.html
+function printStudents(jsonData) {
+	$('#students-container').append(
+	    '<table id="studenttable" class="table table-bordered">'
+      	+ '<tbody id="studenttbody">'
+      	+ '<th>Nimi</th>'
+      	+ '<th>Aloitti kokeen</th>'
+      	+ '<th>Lopetti kokeen</th>'
+      	+ '<th>Tulos</th>'
+      	+ '</tbody></table>'
+	);
+
+	for (var i = 0; i < jsonData.length; i++) {
+		if (jsonData[i].id_check == "true") {
+			var signupDate = new Date(jsonData[i].signupDate);
+			var endDate = new Date(jsonData[i].endDate);
+			var redirectURL = "'/studentresult/?id=" + jsonData[i]._id + "'";
+			$('#studenttbody').append(
+				'<tr>'
+				+ '<td class="searchable">'
+				+ jsonData[i].lastname + " " + jsonData[i].firstname
+	    		+ '</td>'
+				+ '<td>'
+				+ signupDate.toLocaleString()
+				+ '</td>'
+				+ '<td>'
+				+ endDate.toLocaleString()
+				+ '</td>'
+				+ '<td>'
+				+ jsonData[i].result + '/' + jsonData[i].student_answers.length
+				+ '</td>'
+				+ '<td id="redirectcell">'
+				+ '<button id="redirectbtn" class="btn btn-xs btn btn-primary" onClick="location.href=' 
+				+ redirectURL 
+				+ ';">Suoritukseen</button>'
+				+ '</td>'
+				+ '</tr>'
+			);
+		}		
+	}
+}
+
+// Prints student info (general info and answers) for studentresult.html
+function printStudentInfo(jsonData) {
+	var signupDate = new Date(jsonData.signupDate);
+	var endDate = new Date(jsonData.endDate)
+
+	// general student information
+	$('#student-container').append(
+		'<p class="text-center"><span class="glyphicon glyphicon-user" aria-hidden="true">&nbsp;</span><b>Kokeen tekijä: </b>'
+		+ jsonData.lastname + ', ' + jsonData.firstname
+		+ '<p class="text-center"><span class="glyphicon glyphicon-time" aria-hidden="true">&nbsp;</span><b>Aloitti kokeen: </b>'
+		+ signupDate.toLocaleString()
+		+ '<p class="text-center"><span class="glyphicon glyphicon-time" aria-hidden="true">&nbsp;</span><b>Lopetti kokeen: </b>'
+		+ endDate.toLocaleString()
+		+ '<p class="text-center"><span class="glyphicon glyphicon-envelope" aria-hidden="true">&nbsp;</span><b>Sähköposti: </b>'
+		+ jsonData.email
+		+ '<p class="text-center"><span class="glyphicon glyphicon-stats" aria-hidden="true">&nbsp;</span><b>Tulos: </b>'
+		+ jsonData.result + '/' + jsonData.student_answers.length
+	);
+
+	$('#student-container').append(	
+		'<hr/>'
+		+ '<h4 class="center-x center-y">Vastaukset</h4>'
+		+ '<table id="answerstable" class="table table-bordered">'
+		+ '<tbody id="answerstbody">'
+      	+ '<th>Kysymys</th>'
+      	+ '<th id="answer">Tekijän vastaus</th>'
+      	+ '</tbody></table>'
+	);
+
+	for (var i = 0; i < jsonData.student_answers.length; i++) {
+		$('#answerstbody').append(
+			'<tr '
+			+ (jsonData.student_answers[i].correct == "true" ? 'class="success">' : 'class="danger">')
+			+ '<td>'
+			+ jsonData.student_answers[i].question
+			+ '</td>'
+			+ '<td>'
+			+ (jsonData.student_answers[i].userAnswer == "true" 
+				? '<span class="label label-success center-block">Oikein</span>' 
+				: '<span class="label label-danger center-block">Väärin</span>')
+			+ '</td>'
+			+ '</tr>'
+		);
+	}
+}
+
+// Prints students that participate in the exam in examinfo.html.
 function printStudentsByExam(jsonData) {
 	$('#students-container').append(
 	    '<table id="questiontable" class="table table-bordered table-striped">'
@@ -96,6 +235,7 @@ function printStudentsByExam(jsonData) {
 
 	for (var i = 0; i < jsonData.length; i++) {
 		var signupDate = new Date(jsonData[i].signupDate);
+		var redirectURL = "'/studentresult/?id=" + jsonData[i]._id + "&examid=" + jsonData[i].examid + "'";
 		$('#questiontbody').append(
 			'<tr>'
 			+ '<td>'
@@ -123,21 +263,18 @@ function printStudentsByExam(jsonData) {
 			$('#result_cell' + jsonData[i]._id).append('<button class="btn btn-xs btn-primary btn-block" onClick="acceptAnswer(' + jsonData[i]._id + ')">Hyväksy vastaukset</button>');
 		} else {
 			$('#status_cell' + jsonData[i]._id).append('<span class="label label-success center-block">Koe palautettu</span>');
-			$('#result_cell' + jsonData[i]._id).append('<b>' + jsonData[i].result + '/80</b>');
+			//$('#result_cell' + jsonData[i]._id).append('<b>' + jsonData[i].result + '/' + jsonData[i].student_answers.length + '</b>');
+			$('#result_cell' + jsonData[i]._id).append(
+				'<button id="redirectbtn" class="btn btn-xs btn btn-primary btn-block" onClick="location.href=' 
+				+ redirectURL 
+				+ ';">Suoritukseen</button>'
+				+ '</td>'
+			);
 		}
  	}
 }
 
-// Accepts the sent answers for a student in examinfo
-function acceptAnswer(studentID) {
-	console.log(studentID);
-	$.get('/acceptanswer/' + studentID, function(data){
-		alert("Vastaukset hyväksytty.");
-		location.reload();
-	});
-}
-
-// examinfo.html function for printing exam information
+// Prints exam information, examinfo.html 
 function printExamInfo(jsonData) {
 	var starttime = new Date(jsonData.starttime);
 	var endtime;
@@ -169,9 +306,8 @@ function printExamInfo(jsonData) {
 	}
 }
 
-// examcontrol.html function for listing the exams
+// Prints exam data for examcontrol.html
 function printExams(jsonData) {
-
 	if (jsonData.length != 0) {
 		$('#exams-container').append(
 			'<h4 class="center-x center-y">Aktiiviset kokeet</h4>'
@@ -245,6 +381,7 @@ function printExams(jsonData) {
 	}
 }
 
+// Prints questions for editing, editquestions.html
 function printQuestionsForEdit(jsonData) {
 	$('#questions-container').append(
 	    '<table id="questiontable" class="table table-bordered table-striped">'
@@ -314,7 +451,15 @@ function printQuestionsForEdit(jsonData) {
 			+ '</tr>');
  	} 
  }
- 
+
+// Accepts the sent answers for a student in examinfo
+function acceptAnswer(studentID) {
+	$.get('/acceptanswer/' + studentID, function(data){
+		alert("Vastaukset hyväksytty.");
+		location.reload();
+	});
+}
+
 // Show the add question input boxes
 function toggleAdd() {
 	if (document.getElementById("add_question_inputs").style.display == "block")
@@ -341,7 +486,6 @@ function addQuestion() {
 			window.alert("Kysymyksen lisääminen epäonnistui.");
 		}
 	});
-
 	document.getElementById("add_question_inputs").style.display="none";
 }
 
@@ -406,6 +550,7 @@ function deleteQuestion(id) {
 	});
 }
 
+// Creates a request for a new exam
 function createExam() {
 	$.get('/create_exam', function(data){
 		if (data.succesful == true) {
@@ -418,6 +563,7 @@ function createExam() {
 	});
 }
 
+// Creates request for ending an exam by id
 function endExam() {
 	$.get('/stopexam/' + getUrlParameter('id'), function(data){
 		alert("Koe lopetettu.");
@@ -428,7 +574,7 @@ function endExam() {
 	location.reload();
 }
 
-// Events
+// JQUERY events
 $(document).ready(function() {
 	// Event for changing true/false in select_answer
 	$('body').on('click', 'a.select_answer_option', function() {
@@ -438,10 +584,7 @@ $(document).ready(function() {
 	    $(this).parents('.dropdown').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>'); 
   	});
 
-  	//$('.toggleable').button('toggle').addClass('active');
-
   	$('body').on('click', '.toggleable', function() {
-  		console.log("got the toggle click");
   		$(this).blur();
   		if ($(this).hasClass('active')) {
 	    	$(this).removeClass('active');
@@ -451,5 +594,34 @@ $(document).ready(function() {
 	    	$(this).addClass('active');
 	    	$(this).css("background-color", "#e6e6e6");
 	    }
-  	});	
+  	});
+
+  	// Search in results.html using regular expressions
+  	$( '#searchtext' ).change(function() {
+  		$('td.searchable').each(function() {
+  			var patternRaw = $( '#searchtext' ).val()
+
+  			if (patternRaw.indexOf(" ") > -1) {
+  				patternRaw = patternRaw.replace(/\s+/g,' ').trim();
+  				var words = patternRaw.split(" ");
+  				patternRaw = "";
+  				for (var i = 0; i < words.length; i++) {
+  					words[i] = "(" + words[i] + ") ";
+  					patternRaw += words[i];
+  				}
+  				var pattern = patternRaw.replace(" ", " +?");
+  				pattern = pattern.substring(0, (pattern.length-1));
+  			} else {
+  				pattern = patternRaw;
+  			}
+  			
+  			var regex = new RegExp(pattern, "i");
+
+  			if ( regex.test( $(this).text() ) ) {
+  				$(this).closest('tr').show();
+  			} else {
+  				$(this).closest('tr').hide();
+  			}
+  		});
+	});
 });

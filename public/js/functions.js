@@ -1,10 +1,13 @@
-// Function for initializing exam.html
+/* INIT FUNCTIONS */
+
 function initExam() {
 	fetchExamQuestions();
 	startTimer();
 }
 
-// Sends request for getting the questions from database
+/* FETCH-FUNTIONS */
+/* These create GET-requests for various data to the server */ 
+
 function fetchExamQuestions() {
 	$.ajax ({
 		url : "get_questions",
@@ -21,7 +24,9 @@ function fetchExamQuestions() {
 	});
 }
 
-// Prints the fetched questions with the true/false options
+/* PRINT-FUNCTIONS */
+/* These print the fetched data for the user to examine */
+
 function printExamQuestions(jsonData) {
 	var counterString = "0/" + jsonData.length;
 	document.getElementById("counter").innerHTML = counterString;

@@ -101,13 +101,13 @@ function startTimer() {
     	time = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
     	document.getElementById("timer").innerHTML = time;
     	if (m == 60) {
-    		submitform()
+    		submitform(true);
     	}
 	}
 }
 
 // submit form function called from the submit button
-function submitform() {
+function submitform(force) {
 	// in the finnish rally language we call this "purkka"
 	var questionsInForm = 0;
 	var answeredQuestions = 0;
@@ -121,7 +121,7 @@ function submitform() {
 		}
 	});
 
-	if (questionsInForm == answeredQuestions) document.answerform.submit();
+	if (questionsInForm == answeredQuestions || force == true) document.answerform.submit();
   	else alert("Vastaa kaikkiin kysymyksiin.")
 }
 

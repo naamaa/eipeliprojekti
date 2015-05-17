@@ -186,8 +186,11 @@ function printStudentInfo(jsonData) {
 	var signupDate = new Date(jsonData.signupDate);
 	var endDate = new Date(jsonData.endDate)
 
+	$('#print').append('Tulostusystävällinen versio');
+	$('#print-answers').append('Tulostusystävällinen versio vastauksilla');
+
 	// general student information
-	$('#student-container').append(
+	$('#student-info-container').append(
 		'<p class="text-center"><span class="glyphicon glyphicon-user" aria-hidden="true">&nbsp;</span><b>Kokeen tekijä: </b>'
 		+ jsonData.lastname + ', ' + jsonData.firstname
 		+ '<p class="text-center"><span class="glyphicon glyphicon-time" aria-hidden="true">&nbsp;</span><b>Aloitti kokeen: </b>'
@@ -200,7 +203,7 @@ function printStudentInfo(jsonData) {
 		+ jsonData.result + '/' + jsonData.student_answers.length
 	);
 
-	$('#student-container').append(	
+	$('#student-answers-container').append(	
 		'<hr/>'
 		+ '<h4 class="center-x center-y">Vastaukset</h4>'
 		+ '<table id="answerstable" class="table table-bordered">'
@@ -214,7 +217,8 @@ function printStudentInfo(jsonData) {
 		$('#answerstbody').append(
 			'<tr '
 			+ (jsonData.student_answers[i].correct == "true" ? 'class="success">' : 'class="danger">')
-			+ '<td>'
+			+ '<td><b>'
+			+ (jsonData.student_answers[i].correct == "true" ? 'O: </b>' : 'V: </b>')
 			+ jsonData.student_answers[i].question
 			+ '</td>'
 			+ '<td>'
@@ -289,6 +293,7 @@ function printExamInfo(jsonData) {
 		$('#exam-container').append(
 			'<h4 class="text-center"><b>Koe on päättynyt</b></h4>'
 		);
+		$('#print').append('Tulostusystävällinen versio');
 	}
 	$('#exam-container').append(
 		'<p class="text-center"><span class="glyphicon glyphicon-time" aria-hidden="true">&nbsp;</span>'
@@ -575,7 +580,50 @@ function endExam() {
 	location.reload();
 }
 
-// JQUERY events
+/* Printer friendly page functions */
+
+function printStudentResultPage(printAnswers) {
+	var disp_setting = "toolbar=yes,location=yes,directories=yes,menubar=yes,"; 
+	disp_setting += "scrollbars=yes,width=800, height=900, left=100, top=25"; 
+
+	var content_vlue = $('#student-info-container').html(); //document.getElementById("print_content").innerHTML; 
+	//console.log(content_vlue);
+	if (printAnswers) {
+		content_vlue += $('#student-answers-container').html(); 
+	}
+
+	var docprint = window.open("", "", disp_setting); 
+	docprint.document.open(); 
+	docprint.document.write('<html><head><title>Koekertatuloste</title>'); 
+	docprint.document.write('</head><body onLoad="self.print()"><center>');          
+	docprint.document.write(content_vlue);
+	docprint.document.write('</center></body></html>'); 
+	docprint.document.close(); 
+	docprint.focus();
+}
+
+// Prints exam page, removes buttons
+function printExamPage() { 
+	//console.log("printing");
+	var disp_setting = "toolbar=yes,location=yes,directories=yes,menubar=yes,"; 
+	disp_setting += "scrollbars=yes,width=800, height=900, left=100, top=25"; 
+
+	var content_vlue = $('#exam-container').html(); //document.getElementById("print_content").innerHTML; 
+	content_vlue += $('#students-container').html();  
+	//console.log(content_vlue);
+	content_vlue = content_vlue.replace(/(<button)(.*?<\/button>)/ig, "");
+
+	var docprint = window.open("", "", disp_setting); 
+	docprint.document.open(); 
+	docprint.document.write('<html><head><title>Koekertatuloste</title>'); 
+	docprint.document.write('</head><body onLoad="self.print()"><center>');          
+	docprint.document.write(content_vlue);
+	docprint.document.write('</center></body></html>'); 
+	docprint.document.close(); 
+	docprint.focus();
+}
+
+/* JQuery events */
 $(document).ready(function() {
 	// Event for changing true/false in select_answer
 	$('body').on('click', 'a.select_answer_option', function() {

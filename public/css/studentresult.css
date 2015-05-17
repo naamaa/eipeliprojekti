@@ -21,3 +21,7 @@
 th {
 	text-align: center;
 }
+
+#print, #print-answers {
+	float: right;
+}

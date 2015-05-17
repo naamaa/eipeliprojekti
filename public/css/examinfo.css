@@ -26,3 +26,6 @@ td.label {
     display: block;
 }
 
+#print {
+	float: right;
+}

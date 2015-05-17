@@ -26,9 +26,14 @@
       <button id="backbtn" type="submit" class="btn btn-default" onclick="window.location='/results';">
         <i class="glyphicon glyphicon-arrow-left"></i>
       </button>
+      <a id="print" href="javascript:printStudentResultPage(false)" class="center-y center-x"></a><br/>
+      <a id="print-answers" href="javascript:printStudentResultPage(true)" class="center-y center-x"></a>
       <h3 class="center-y center-x">Suoritus</h3>
       <div id="student-container" class="container">
-
+        <div id="student-info-container">
+        </div>
+        <div id="student-answers-container">
+        </div>
       </div>
 
     </div> <!-- main-container /container -->

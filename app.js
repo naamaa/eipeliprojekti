@@ -161,6 +161,12 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
             root: __dirname + '/private'
         });
     });
+    //GET for complete
+    app.get('/complete', function(req, res) {
+        res.sendFile("complete.html", {
+            root: __dirname + '/private'
+        });
+    });
     /* POST /login */
     app.post('/login', passport.authenticate('admin-local', {
         successRedirect: '/controlpanel',
@@ -288,15 +294,15 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
             array[randomIndex] = tempValue;
         }
         // Picking out 80 questions from shuffled array
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 80; i++) {
             final_array.push(array[i]);
         }
         return final_array;
     }
-    	app.get("/get_students", isAuthenticated, loginGroup('admin'), function(req, res) {
+	app.get("/get_students", isAuthenticated, loginGroup('admin'), function(req, res) {
 		var students = db.collection('students');
 
-	  	students.find().sort({lastname : -1, firstname : -1}).toArray(function (err, items) {
+	  	students.find().sort({lastname : 1, firstname : 1}).toArray(function (err, items) {
 	  		if (err) {
 	  			console.log(err);
 	  		}
@@ -391,7 +397,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
         var students = db.collection('students');
         examid = req.params.examid;
         students.find({examid: parseInt(examid)})
-        .sort({lastname : -1, firstname : -1})
+        .sort({lastname : 1, firstname : 1})
         .toArray(function(err, items) {
             if (err) {
                 console.log(err);
@@ -515,7 +521,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
 				else if (result) {
 					console.log("Added scores and student answer data to student document!");
 					req.logout();
-					res.redirect('/');
+					res.redirect('/complete');
 				}
 				else if (!result) {
 					console.log("Couldn't find a student with that id.");

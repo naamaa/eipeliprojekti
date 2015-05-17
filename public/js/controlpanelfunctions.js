@@ -58,6 +58,7 @@ function fetchStudents() {
 
 		success : function(data) {
 			console.log("Got the students from database.");
+			console.log(data)
 			printStudents(data);
 		},
 
@@ -160,7 +161,7 @@ function printStudents(jsonData) {
 				+ '<td class="searchable">'
 				+ jsonData[i].lastname + " " + jsonData[i].firstname
 	    		+ '</td>'
-				+ '<td>'
+				+ '<td class="searchabletime">'
 				+ signupDate.toLocaleString()
 				+ '</td>'
 				+ '<td>'
@@ -599,25 +600,23 @@ $(document).ready(function() {
   	// Search in results.html using regular expressions
   	$( '#searchtext' ).change(function() {
   		$('td.searchable').each(function() {
-  			var patternRaw = $( '#searchtext' ).val()
-
-  			if (patternRaw.indexOf(" ") > -1) {
-  				patternRaw = patternRaw.replace(/\s+/g,' ').trim();
-  				var words = patternRaw.split(" ");
-  				patternRaw = "";
+  			// Creating the regex pattern
+  			var pattern = $( '#searchtext' ).val()
+  			//console.log(pattern);
+  			if (pattern.indexOf(" ") > -1) {
+  				pattern = pattern.replace(/\s+/g,' ').trim();
+  				var words = pattern.split(" ");
+  				pattern = ".*";
   				for (var i = 0; i < words.length; i++) {
-  					words[i] = "(" + words[i] + ") ";
-  					patternRaw += words[i];
+  					words[i] = "(?=.*" + words[i] + ")";
+  					pattern += words[i];
   				}
-  				var pattern = patternRaw.replace(" ", " +?");
-  				pattern = pattern.substring(0, (pattern.length-1));
-  			} else {
-  				pattern = patternRaw;
+  				pattern += ".*";
   			}
-  			
+  			//console.log(pattern);
   			var regex = new RegExp(pattern, "i");
 
-  			if ( regex.test( $(this).text() ) ) {
+  			if ( regex.test($(this).text()) || regex.test($(this).nextAll('.searchabletime').text()) ) {
   				$(this).closest('tr').show();
   			} else {
   				$(this).closest('tr').hide();

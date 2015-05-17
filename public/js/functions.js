@@ -1,5 +1,7 @@
 /* INIT FUNCTIONS */
 
+var currentPage = 1;
+
 function initExam() {
 	fetchExamQuestions();
 	startTimer();
@@ -33,7 +35,8 @@ function printExamQuestions(jsonData) {
 	var questionCounter = 1;
 	for (var i = 0; i < jsonData.length; i++) {
 		$('#answers-form').append(
-			'<div id="question_wrapper' + questionCounter + '"'
+			//'<div id="question_wrapper' + questionCounter + '">'
+			'<div id="question_wrapper' + questionCounter + '" class="question-wrapper">'
 			+ '<div id="label"><label for="question' 
 			+ questionCounter 
 			+ '" class="control-label input-group"><h4>' 
@@ -69,6 +72,69 @@ function printExamQuestions(jsonData) {
 			})
 		});	
 	}
+	$('#page-cell').append(
+		'<nav class="center-x center-y">'
+  		+ '<ul class="pagination pagination-lg">'
+    	+ '<li id="previous-page">'
+      	+ '<a href="javascript:changeExamPage(-1)" aria-label="Previous">'
+        + '<span aria-hidden="true">&laquo;</span>'
+      	+ '</a>'
+    	+ '</li>'
+    	+ '<li id="page1" class="nav-page"><a href="javascript:changeExamPage(1)">1</a></li>'
+    	+ '<li id="page2" class="nav-page"><a href="javascript:changeExamPage(2)">2</a></li>'
+    	+ '<li id="page3" class="nav-page"><a href="javascript:changeExamPage(3)">3</a></li>'
+    	+ '<li id="page4" class="nav-page"><a href="javascript:changeExamPage(4)">4</a></li>'
+    	+ '<li id="next-page">'
+     	+ '<a href="javascript:changeExamPage(5)" aria-label="Next">'
+        + '<span aria-hidden="true">&raquo;</span>'
+      	+ '</a>'
+    	+ '</li>'
+  		+ '</ul>'
+		+ '</nav>'
+	);
+	refreshExam();
+}	
+
+function refreshExam() {
+	// make the corresponding page active in pagination nav
+	$('.nav-page').each(function() {
+		if ($(this).hasClass('active')) $(this).removeClass('active')
+	});
+	$('#page' + currentPage).addClass('active');
+
+	// disable next / previous page buttons if needed
+	if (currentPage <= 1) $('#previous-page').addClass('disabled')
+	else $('#previous-page').removeClass('disabled')
+	if (currentPage >= 4) $('#next-page').addClass('disabled')
+	else $('#next-page').removeClass('disabled')
+
+	// hide and show wrapper div depending on currentPage
+	var qCount = 0;
+	$('.question-wrapper').each(function() {
+		if (qCount < (currentPage*20) && qCount >= (currentPage*20-20)) {
+			$(this).show();
+		} else $(this).hide();
+		qCount++;
+	});
+	//console.log("current page : " + currentPage);
+}
+
+function changeExamPage(pageParam) {
+	// (pageParam == 5) => currentPage += 1
+	// (pageParam == -1) => currentPage -= 1
+	//console.log("pageparam : " + pageParam);
+	if (pageParam == 1 ||
+		pageParam == 2 ||
+		pageParam == 3 ||
+		pageParam == 4) {
+		currentPage = pageParam; 
+	} else if (pageParam == 5) {
+		if (currentPage <= 3) currentPage += 1;
+	} else if (pageParam == -1) {
+		if (currentPage >= 2) currentPage -= 1;
+	}
+	refreshExam();
+	window.scrollTo(0, 0);
 }
 
 // Function that gets GET-parameters by name (from URL)
@@ -114,14 +180,14 @@ function submitform(force) {
 	$('.question_answer').each(function() {
 		questionsInForm++;
 	});
-
 	$("label").each(function() {
 		if ($(this).hasClass('active')) {
 			answeredQuestions++;
 		}
 	});
-
-	if (questionsInForm == answeredQuestions || force == true) document.answerform.submit();
+	if (questionsInForm == answeredQuestions || force == true) {
+		document.answerform.submit();
+	}
   	else alert("Vastaa kaikkiin kysymyksiin.")
 }
 

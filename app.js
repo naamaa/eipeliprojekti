@@ -178,6 +178,77 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
         failureRedirect: '/?retry=true'
     }));
 
+    app.post("/adminsignup", isAuthenticated, loginGroup('admin'), function(req, res) {
+        var username = req.body.username;
+        var password = req.body.password;
+        var password2 = req.body.password;
+
+        var salt = "0serj9fuhaa09suejdrawserf90hnj23490";
+        var hashpassword = sha1(salt + username + password);
+        
+        
+        getAdmin(username, function (userFound) {
+            
+            if (userFound) {
+                res.send("Käyttäjätunnus " + "'" +username+"'" + " on jo olemassa");
+            }
+            else {
+                autoIncrement.getNextSequence(db, "questions", function(err, autoIndex) {
+                    var User = db.collection("users");
+                    console.log("Adding admin-user with autoIndex ID : " + autoIndex);
+                        User.insert({
+                            _id: autoIndex,
+                            user: username,
+                            password: hashpassword,
+                        }, function(err, result) {
+                            if (err) {
+                                console.log(err);
+                                res.json({
+                                    succesful: false
+                                });
+                            } else if (result) {
+                                console.log("Added!");
+                                res.json({
+                                    succesful: true
+                                });
+                            } else if (!result) {
+                                console.log("Couldn't add admin-user.")
+                                res.json({
+                                    succesful: false
+                                });
+                            }
+                        });
+                    });
+                }
+        });
+    });
+
+    // If admin is found : return true
+    // else : return false
+    function getAdmin(username, callback) {
+        var User = db.collection("users");
+        var found;
+       
+
+        User.findOne({
+            user: username
+        }, function(err, usernamedb) {
+            if (err) {
+                console.log(err);
+            } 
+            else if (usernamedb != null) {
+                found = true;
+                callback(found);
+            }
+            else {
+                found = false;
+                callback(found);
+            }
+        });
+        
+
+    }
+
     /* GET/create_exam  creates unique cutting edge login code for user and inserts it to database. Also administrator name must be given and starttime */
     app.get('/create_exam', isAuthenticated, loginGroup('admin'), function(req, res) {
         autoIncrement.getNextSequence(db, "exams", function(err, autoIndex) {

@@ -1,53 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="../../favicon.ico">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+  
+    <!-- Bootstrap & jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!-- Javascript -->
+    <script src="js/functions.js"></script>
+    <script src="js/controlpanelfunctions.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" tpye="text/css" href="css/styles.css">
+    <link rel="stylesheet" tpye="text/css" href="css/examcontrol.css">
+  
+    <title>Käyttäjänhallinta</title>
+  </head>
+  <body  onLoad="initEditAdmins()">
+    <div id="main-container" class="container">
+      <button type="submit" class="btn btn-default" onclick="window.location='controlpanel';">
+        <i class="glyphicon glyphicon-arrow-left"></i>
+      </button>
+      <h3 class="center-y center-x">Tunnusten hallinta</h3>
+      <div class="span7 text-center">
+        <button id="create_exam" class="btn btn-primary btn-block" onClick="createAdmin()">Luo admintunnus</button>
+      </div>
+      <div id="exams-container" class="container">
 
-        <!-- Bootstrap & jquery -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        <!-- Javascript -->
-        <script src="js/functions.js"></script>
-        <script src="js/controlpanelfunctions.js"></script>
-        <!-- CSS -->
-        <link rel="stylesheet" tpye="text/css" href="css/styles.css">
-        <link rel="stylesheet" tpye="text/css" href="css/results.css">
-
-        <title>Käyttäjähallinta</title>
-    </head>
-
-    <body >
-        <div id="main-container" class="container">
-            <button type="submit" class="btn btn-default" onclick="window.location='controlpanel';">
-            <i class="glyphicon glyphicon-arrow-left"></i>
-            </button>
-            <h3 class="center-y center-x">Käyttäjähallinta</h3>
-
-            <form action="/adminsignup" method="post" name="admin-registeration-form">
-                <div class="form-group">
-                    <label>Käyttäjätunnus</label>
-                    <input type="text" class="form-control" name="username" >
-                </div>
-                <div class="form-group">
-                    <label>Salasana</label>
-                    <input type="password" class="form-control" name="password">
-                </div>
-                <div class="form-group">
-                    <label>Vahvista salasana</label>
-                    <input type="password" class="form-control" name="password-2">
-                </div>
-                <div class="text-center">
-                	<button type="submit" class="btn btn-default btn-primary btn-block">Luo admin-tunnus</button>
-                </div>
-            </form>
-
-            </div> <!-- main-container /container -->
-        </body>
-
-    </html>
+      </div>
+      
+    </div> <!-- main-container /container -->
+  </body>
+</html>

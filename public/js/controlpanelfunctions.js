@@ -6,6 +6,11 @@ function initEditQuestions() {
 	fetchQuestionsForEdit();
 }
 
+function initEditAdmins() {
+	fetchAdminsForEdit();
+}
+
+
 function initExamControl() {
 	fetchExams();
 }
@@ -136,9 +141,51 @@ function fetchQuestionsForEdit() {
 	});
 }
 
+function fetchAdminsForEdit() {
+	$.ajax ({
+		url : "get_admins_all",
+		dataType :"json",
+		type:"GET",
+
+		success : function(data) {
+			console.log("Got admins from database.");
+			printAdminsForEdit(data);
+		},
+
+		error : function(err) {
+			console.log(err);				
+		}
+	});
+}
 /* PRINT-FUNCTIONS */
 /* These print the fetched data for the user to examine */
+function printAdminsForEdit(jsonData) {
+	if (jsonData.length != 0) {
+		$('#exams-container').append(
+			'<h4 class="center-x center-y">Admin tunnukset</h4>'
+		    + '<table id="pastexamtable" class="table table-bordered">'
+	      	+ '<tbody id="pastexamtbody">'
+	      	+ '<th>Tunnus</th>'
+	      	+ '<th class="redirect"></th>'
+	      	+ '</tbody></table>'
+		);
+	}
 
+	for (var i = 0; i < jsonData.length; i++) {
+		var redirectURL = "'/deleteadmin/" + jsonData[i]._id + "'";
+
+			$('#pastexamtbody').append(
+				'<tr>'
+				+ '<td>'
+				+ jsonData[i].user
+				+ '</td>'
+				+ '<td>'
+				+ '<button class="btn btn-xs btn-block btn-primary" onClick="deleteAdmin('+jsonData[i]._id+');">Poista tunnus</button>'
+				+ '</td>'
+				+ '</tr>'
+			);
+		}
+}
 // Prints student data for results.html
 function printStudents(jsonData) {
 	$('#students-container').append(
@@ -621,6 +668,38 @@ function printExamPage() {
 	docprint.document.write('</center></body></html>'); 
 	docprint.document.close(); 
 	docprint.focus();
+}
+
+function createAdmin(){
+	location.href = "/createadmin";
+}
+
+function addAdmin() {
+	var username = $('#username').val();
+	var password = $("#password").val();
+	var password2 = $("#password2").val();
+
+	$.post('/adminsignup', {username: username, password: password}, function(data) {
+		if (data.succesful == true) {
+			window.alert("Tunnus lisätty.");
+			location.reload();
+		}
+		else if (data.succesful == false) {
+			window.alert("Tunnuksen lisääminen epäonnistui.");
+		}
+	});
+}
+
+function deleteAdmin(id) {
+	$.post('/deleteadmin', { _id: id }, function(data) {
+		if (data.succesful == true) {
+			window.alert("Poisto onnistui");
+			location.reload();
+		}
+		else if (data.succesful == false) {
+			window.alert("Poisto epäonnistui");
+		}
+	});
 }
 
 /* JQuery events */

@@ -167,6 +167,40 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
             root: __dirname + '/private'
         });
     });
+    //GET FOR CREATE ADMIN
+    app.get('/createadmin', isAuthenticated, loginGroup('admin'), function(req,res){
+        res.sendFile("createadmin.html",{
+            root: __dirname +'/private'
+        });
+    });
+    //GET FOR DELETE ADMIN
+    app.post('/deleteadmin',isAuthenticated, loginGroup('admin'), function(req,res){
+        var id = parseInt(req.body._id);
+        console.log(id);
+                var User = db.collection("users");
+                    console.log("Removing admin-user with ID : " + id);
+                        User.remove({
+                            _id: id,
+                        }, function(err, result) {
+                            if (err) {
+                                console.log(err);
+                                res.json({
+                                    succesful: false
+                                });
+                            } else if (result) {
+                                console.log("Removed");
+                                res.json({
+                                    succesful: true
+                                });
+                            } else if (!result) {
+                                console.log("Couldn't remove admin")
+                                res.json({
+                                    succesful: false
+                                });
+                            }
+                        });
+    });
+
     /* POST /login */
     app.post('/login', passport.authenticate('admin-local', {
         successRedirect: '/controlpanel',
@@ -386,6 +420,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
 	  		}				
 		});
 	});
+
     app.get("/set_participantcount/:examid", isAuthenticated, loginGroup('admin'), function(req, res) {
         var students = db.collection('students');
         examid = req.params.examid;
@@ -400,6 +435,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
             }
         });
     });
+
     function updateParticipants(examid, count) {
         var exams = db.collection('exams');
         exams.update({
@@ -539,6 +575,14 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
         var questions = db.collection('questions');
         questions.find().toArray(function(err, items) {
             console.log("Question data sent to client.");
+            res.send(items);
+        });
+    });
+
+    app.get("/get_admins_all", isAuthenticated, loginGroup('admin'), function(req, res) {
+        var questions = db.collection('users');
+        questions.find().toArray(function(err, items) {
+            console.log("Admins sent to client.");
             res.send(items);
         });
     });

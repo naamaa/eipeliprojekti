@@ -6,6 +6,7 @@ function checkPasswordMatch() {
     	$("#divCheckPasswordMatch").removeClass("alert alert-success");
     	$("#divCheckPasswordMatch").addClass("alert alert-danger");
         $("#divCheckPasswordMatch").html("Salasanat eivät vastaa toisiaan!");
+        $("#submit-btn").hide();
         
 
      }
@@ -14,6 +15,7 @@ function checkPasswordMatch() {
     	$("#divCheckPasswordMatch").removeClass("alert alert-danger");
     	$("#divCheckPasswordMatch").addClass("alert alert-success");
         $("#divCheckPasswordMatch").html("Salasanat ovat yhtenäiset.");
+         $("#submit-btn").show();
 
 
     }

@@ -13,7 +13,7 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         <!-- Javascript -->
         <script src="js/functions.js"></script>
-        <script src="js/controlpanelfunctions.js"></script>
+        <script src="js/usercontrol.js"></script>
         <!-- CSS -->
         <link rel="stylesheet" tpye="text/css" href="css/styles.css">
         <link rel="stylesheet" tpye="text/css" href="css/results.css">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="form-group">
                     <label>Salasana</label>
-                    <input type="password" class="form-control" id="password"name="password">
+                    <input type="password" class="form-control" id="password" name="password">
                 </div>
                 <div class="form-group">
                     <label>Vahvista salasana</label>
@@ -43,6 +43,9 @@
                 <div class="text-center">
                 	<button class="btn btn-default btn-primary btn-block" onclick="addAdmin()">Luo admin-tunnus</button>
                 </div>
+
+                
+                <div class="registrationFormAlert" id="divCheckPasswordMatch"> </div>
 
             </div> <!-- main-container /container -->
         </body>

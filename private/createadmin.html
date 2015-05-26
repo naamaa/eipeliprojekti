@@ -18,14 +18,26 @@
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="css/styles.css">
 
+        <style>
+        #main-container {
+            margin-top: 15px;
+            max-width: 700px;
+        }
+
+        #back {
+            width: 40px;
+            height: 34px;
+        }
+        </style>
+
         <title>Käyttäjähallinta</title>
     </head>
 
     <body >
         <div id="main-container" class="container">
-            <button type="submit" class="btn btn-default" onclick="window.location='controlpanel';">
+            <button id="back" type="submit" class="btn btn-default" onclick="window.location='controlpanel';">
                 <i class="glyphicon glyphicon-arrow-left"></i>
-             </button>
+            </button>
             <h3 class="center-y center-x">Käyttäjähallinta</h3>
 
                 <div class="form-group">

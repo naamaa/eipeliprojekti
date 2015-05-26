@@ -72,27 +72,29 @@ function printExamQuestions(jsonData) {
 			})
 		});	
 	}
-	$('#page-cell').append(
-		'<nav class="center-x center-y">'
-  		+ '<ul class="pagination pagination-lg">'
-    	+ '<li id="previous-page">'
-      	+ '<a href="javascript:changeExamPage(-1)" aria-label="Previous">'
-        + '<span aria-hidden="true">&laquo;</span>'
-      	+ '</a>'
-    	+ '</li>'
-    	+ '<li id="page1" class="nav-page"><a href="javascript:changeExamPage(1)">1</a></li>'
-    	+ '<li id="page2" class="nav-page"><a href="javascript:changeExamPage(2)">2</a></li>'
-    	+ '<li id="page3" class="nav-page"><a href="javascript:changeExamPage(3)">3</a></li>'
-    	+ '<li id="page4" class="nav-page"><a href="javascript:changeExamPage(4)">4</a></li>'
-    	+ '<li id="next-page">'
-     	+ '<a href="javascript:changeExamPage(5)" aria-label="Next">'
-        + '<span aria-hidden="true">&raquo;</span>'
-      	+ '</a>'
-    	+ '</li>'
-  		+ '</ul>'
-		+ '</nav>'
-	);
-	refreshExam();
+	if (jsonData.length >= 80) {
+		$('#page-cell').append(
+			'<nav class="center-x center-y">'
+	  		+ '<ul class="pagination pagination-lg">'
+	    	+ '<li id="previous-page">'
+	      	+ '<a href="javascript:changeExamPage(-1)" aria-label="Previous">'
+	        + '<span aria-hidden="true">&laquo;</span>'
+	      	+ '</a>'
+	    	+ '</li>'
+	    	+ '<li id="page1" class="nav-page"><a href="javascript:changeExamPage(1)">1</a></li>'
+	    	+ '<li id="page2" class="nav-page"><a href="javascript:changeExamPage(2)">2</a></li>'
+	    	+ '<li id="page3" class="nav-page"><a href="javascript:changeExamPage(3)">3</a></li>'
+	    	+ '<li id="page4" class="nav-page"><a href="javascript:changeExamPage(4)">4</a></li>'
+	    	+ '<li id="next-page">'
+	     	+ '<a href="javascript:changeExamPage(5)" aria-label="Next">'
+	        + '<span aria-hidden="true">&raquo;</span>'
+	      	+ '</a>'
+	    	+ '</li>'
+	  		+ '</ul>'
+			+ '</nav>'
+		);
+		refreshExam();
+	}	
 }	
 
 function refreshExam() {

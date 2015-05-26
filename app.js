@@ -399,7 +399,7 @@ MongoClient.connect('mongodb://localhost:27017/anniskelupassi', function(err, db
             array[randomIndex] = tempValue;
         }
         // Picking out 80 questions from shuffled array
-        var qCount = 0;
+        var qCount = 80;
         if (array.length < 80) qCount = array.length;
         for (var i = 0; i < qCount; i++) {
             final_array.push(array[i]);
